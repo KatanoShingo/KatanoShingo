@@ -74,6 +74,21 @@ Welcome to my GitHub profile!
   - **概要**: UnityのSceneデータを自動バックアップするエディタ拡張
   - `Unity` `C#`
 
+### 🛍️ BOOTH Assets (公開中のアイテム)
+BOOTHにて公開・販売しているアセットやツール群です。
+
+- 📦 **[FileSplitMergeTool](https://feitas.booth.pm/items/6990234)**
+  - **概要**: 大容量のUnityファイルを分割・結合し、Git LFS制限の回避やクラッシュ対策に役立つエディタ拡張
+  - `Unity` `C#` 
+
+- 📦 **[OBJExporter](https://feitas.booth.pm/items/7005523)**
+  - **概要**: 複数のGameObjectや再生中のアニメーションをワンクリックで.obj出力する支援ツール
+  - `Unity` `C#` `3D Print`
+
+- 📦 **[UpdateChecker](https://feitas.booth.pm/items/7008337)**
+  - **概要**: 商品ページの更新をUnityエディタ上で一括管理・検知できる開発者向けチェッカー
+  - `Unity` `C#` 
+
 > *(※ その他、公開可能なリポジトリ一覧は [Repositories](https://github.com/KatanoShingo?tab=repositories) タブからご覧ください)*
 
 ---
