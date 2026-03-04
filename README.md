@@ -66,7 +66,7 @@ Welcome to my GitHub profile!
   - **概要**: プレイヤー間のポイント送信システム、およびポイント自動保存・加算システム
   - `Unity` `UdonSharp` `C#`
 
-- 🔑 **[ワールドログインシステム]([https://vrchat.com/home/world/wrld_45020b1b-5820-4642-8f42-b726e4a5fde6/info](https://vrchat.com/home/world/wrld_45020b1b-5820-4642-8f42-b726e4a5fde6/info))**
+- 🔑 **[ワールドログインシステム](https://vrchat.com/home/world/wrld_45020b1b-5820-4642-8f42-b726e4a5fde6/info)**
   - **概要**: 外部サーバーを経由したワールドログインシステムの構築・実装
   - `Unity` `UdonSharp` `C#` `API`
 
