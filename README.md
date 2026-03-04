@@ -7,6 +7,14 @@ Welcome to my GitHub profile!
 
 ---
 
+## 🏆 Experience & Awards
+
+- **2019.11** 🥈 **第2回 Looking Glass ハッカソン - 準優勝**
+- **2019.04** 🏢 **アプリゲーム会社 入社**
+- **2019.03** 🎓 **専門学校 卒業**
+
+---
+
 ## 🛠 Skills & Technologies
 
 ### Game Engine & Hardware
@@ -19,6 +27,8 @@ Welcome to my GitHub profile!
 ![HLSL](https://img.shields.io/badge/HLSL-4052bf?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![Batch](https://img.shields.io/badge/Batch-4D4D4D?style=for-the-badge&logo=windows-terminal&logoColor=white)
 
 ### Database & Infrastructure
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
@@ -41,17 +51,23 @@ Welcome to my GitHub profile!
 *(※一部の非公開プロジェクトやワールドでは、VRChatから外部Webサーバー・APIへの連携システムの構築なども担当しています)*
 
 - 🌌 **[ツーショットマッチング制 恋のMAKUAKE](https://vrchat.com/home/world/wrld_17905f5b-a310-48cc-b7ca-c03b0a1e5067/info)**
+  - **概要**: 自動マッチングシステム、およびワールドの部屋の軽量化システム
+  - `Unity` `UdonSharp` `C#`
 
 - 🎡 **[居心地ポイント制 MAKUAKE JP](https://vrchat.com/home/world/wrld_355a0278-aaff-4ee0-ba20-e6912386f898/info)**
+  - **概要**: ポイント送信システム、およびポイント自動保存加算システム
+  - `Unity` `UdonSharp` `C#`
 
 ### 💻 GitHub Projects / Tools
 個人開発や、業務効率化のために作成したオープンソースのツール群です。
 
 - 🎙️ **[dji-mic-secretary](https://github.com/KatanoShingo/dji-mic-secretary)**
-  - **概要**: DJI Micを活用した文字起こし・議事録作成などの業務効率化ツール
+  - **概要**: DJI Mic 2を利用した自動文字起こし、自動保存、自動抽出機能
+  - `Python` `API`
 
 - 🔄 **[AutoBackup](https://github.com/KatanoShingo/AutoBackup)**
-  - **概要**: 指定したディレクトリやファイルを自動でバックアップする効率化スクリプト
+  - **概要**: UnityのSceneデータを自動バックアップするエディタ拡張
+  - `Unity` `C#`
 
 > *(※ その他、公開可能なリポジトリ一覧は [Repositories](https://github.com/KatanoShingo?tab=repositories) タブからご覧ください)*
 
