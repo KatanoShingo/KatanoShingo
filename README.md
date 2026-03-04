@@ -70,8 +70,8 @@ Welcome to my GitHub profile!
   - **概要**: アセットの配置や、Blenderを用いた再編集・拡張によるワールド空間の制作
   - `Unity` `Blender`
 
-### 💻 GitHub Projects / Tools（オープンソースツール）
-個人開発や、業務効率化のために作成したツール群です。
+### 💻 GitHub Projects / Tools（オープンソースツール / ボット開発）
+個人開発や、業務効率化のために作成したツール群、およびAPIを活用したボット開発の実績です。
 
 - 🎙️ **[dji-mic-secretary](https://github.com/KatanoShingo/dji-mic-secretary)**
   - **概要**: DJI Mic 2を利用した自動文字起こし、自動保存、自動抽出を行う業務効率化ツール
@@ -80,6 +80,14 @@ Welcome to my GitHub profile!
 - 🔄 **[AutoBackup](https://github.com/KatanoShingo/AutoBackup)**
   - **概要**: 作業中のデータ消失を防ぐ、UnityのSceneデータを自動バックアップする拡張ツール
   - `Unity` `C#`
+
+- ⌨️ **[KeyhacKeymap](https://github.com/KatanoShingo/KeyhacKeymap)**
+  - **概要**: キーボード操作を最適化し、日々の作業を効率化するためのKeyhac用カスタムキーマップ設定
+  - `Python`
+
+- 🤖 **Twitter(X) / Discord / Slack Bot 開発**
+  - **概要**: 各種APIを活用し、自動投稿やサーバー・ワークスペース内の便利機能を提供するボットシステムの開発実績
+  - `Python` `TypeScript` `GAS` `Cloudflare Workers`
 
 ### 🛍️ BOOTH Assets（公開中の販売アイテム）
 BOOTHにて公開・販売している、Unity開発者向けの便利ツール群です。
