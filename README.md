@@ -17,8 +17,9 @@ Welcome to my GitHub profile!
 
 ## 🛠 Skills & Technologies
 
-### Game Engine & Hardware
+### Game Engine & 3D
 ![Unity](https://img.shields.io/badge/-Unity-000000?style=for-the-badge&logo=unity&logoColor=white)
+![Blender](https://img.shields.io/badge/Blender-F5792A?style=for-the-badge&logo=blender&logoColor=white)
 ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white)
 
 ### Languages & Scripting
@@ -46,8 +47,8 @@ Welcome to my GitHub profile!
 
 公開可能な範囲で、現在メインで取り組んでいる・開発したプロジェクトの一部をご紹介します。
 
-### 🌍 VRChat Worlds (システム開発)
-私がバックエンドやギミックのシステム開発（Udon / C#）を担当し、現在公開されているVRChatワールドです。
+### 🌍 VRChat Worlds (システム開発 / ワールド制作)
+私がバックエンドのシステム開発（Udon / C#）や、空間デザイン・モデリングなどを担当したVRChatワールドです。
 *(※一部の非公開プロジェクトやワールドでは、VRChatから外部Webサーバー・APIへの連携システムの構築なども担当しています)*
 
 - 🌌 **[ツーショットマッチング制 恋のMAKUAKE](https://vrchat.com/home/world/wrld_17905f5b-a310-48cc-b7ca-c03b0a1e5067/info)**
@@ -57,6 +58,10 @@ Welcome to my GitHub profile!
 - 🎡 **[居心地ポイント制 MAKUAKE JP](https://vrchat.com/home/world/wrld_355a0278-aaff-4ee0-ba20-e6912386f898/info)**
   - **概要**: ポイント送信システム、およびポイント自動保存加算システム
   - `Unity` `UdonSharp` `C#`
+
+- 🌙 **[𝐌𝐞𝐥𝐭𝐲 𝐍𝐢𝐠𝐡𝐭](https://x.com/VRC_MeltyNight)**
+  - **概要**: アセットの配置や、Blenderを用いた再編集・拡張によるワールド制作
+  - `Unity` `Blender`
 
 ### 💻 GitHub Projects / Tools
 個人開発や、業務効率化のために作成したオープンソースのツール群です。
