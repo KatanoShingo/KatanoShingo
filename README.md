@@ -3,6 +3,8 @@
 Welcome to my GitHub profile! 
 ソフトウェアデベロッパー / Unityエンジニアとして、ゲーム開発、グラフィックスプログラミング、そして効率化ツールの作成に情熱を注いでいます。また、ソフトウェアだけでなくハードウェア（3Dプリンタを活用したモデリング等）を絡めたモノづくりも得意としています。
 
+> 💡 **Note:** > 実際の開発実績や主要なプロジェクトの多くは、業務要件などにより**プライベートリポジトリ**にて管理・運用しています。こちらで公開しているものは、個人開発やオープンソース活動の一部となります。
+
 ---
 
 ## 🛠 Skills & Technologies
@@ -32,27 +34,15 @@ Welcome to my GitHub profile!
 
 ## 🚀 Recent Projects / Portfolios
 
-最近更新したプロジェクトや、現在メインで取り組んでいるリポジトリです。
+公開可能な範囲で、現在メインで取り組んでいる・開発したツールの一部をご紹介します。
 
-<div align="center">
-  <a href="https://github.com/KatanoShingo/dji-mic-secretary">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=KatanoShingo&repo=dji-mic-secretary&theme=radical" alt="Recent Project 1" />
-  </a>
-  <a href="https://github.com/KatanoShingo/AutoBackup">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=KatanoShingo&repo=AutoBackup&theme=radical" alt="Recent Project 2" />
-  </a>
-</div>
+- 🎙️ **[dji-mic-secretary](https://github.com/KatanoShingo/dji-mic-secretary)**
+  - **概要**: DJI Micを活用した文字起こし・議事録作成などの業務効率化ツール
 
-*(※ その他、全27以上のリポジトリは [Repositories](https://github.com/KatanoShingo?tab=repositories) タブからご覧ください)*
+- 🔄 **[AutoBackup](https://github.com/KatanoShingo/AutoBackup)**
+  - **概要**: 指定したディレクトリやファイルを自動でバックアップする効率化スクリプト
 
----
-
-## 📊 GitHub Stats
-
-<div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=KatanoShingo&show_icons=true&theme=radical" alt="GitHub Stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=KatanoShingo&layout=compact&theme=radical" alt="Top Languages" />
-</div>
+> *(※ その他、公開可能なリポジトリ一覧は [Repositories](https://github.com/KatanoShingo?tab=repositories) タブからご覧ください)*
 
 ---
 
