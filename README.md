@@ -75,6 +75,8 @@ Welcome to my GitHub profile!
 
 ## 📫 Contact
 
-お仕事のご相談やお問い合わせは、以下よりお願いいたします。
-- [X (Twitter) - @shi_k_7](https://x.com/shi_k_7)
-- [Email - work@shingo.info](mailto:work@shingo.info)
+お仕事のご相談やお問い合わせは、以下のメールアドレスよりお願いいたします。
+- ✉️ **Email**: [work@shingo.info](mailto:work@shingo.info)
+
+日常のつぶやきや個人の活動については、X (Twitter) アカウントをご覧ください。
+- 🐦 **X (Twitter)**: [@shi_k_7](https://x.com/shi_k_7)
