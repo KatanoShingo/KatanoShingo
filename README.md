@@ -35,11 +35,11 @@ Welcome to my GitHub profile!
 最近更新したプロジェクトや、現在メインで取り組んでいるリポジトリです。
 
 <div align="center">
-  <a href="https://github.com/KatanoShingo/REPLACE_WITH_YOUR_REPO_NAME_1">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=KatanoShingo&repo=REPLACE_WITH_YOUR_REPO_NAME_1&theme=radical" alt="Recent Project 1" />
+  <a href="https://github.com/KatanoShingo/dji-mic-secretary">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=KatanoShingo&repo=dji-mic-secretary&theme=radical" alt="Recent Project 1" />
   </a>
-  <a href="https://github.com/KatanoShingo/REPLACE_WITH_YOUR_REPO_NAME_2">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=KatanoShingo&repo=REPLACE_WITH_YOUR_REPO_NAME_2&theme=radical" alt="Recent Project 2" />
+  <a href="https://github.com/KatanoShingo/AutoBackup">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=KatanoShingo&repo=AutoBackup&theme=radical" alt="Recent Project 2" />
   </a>
 </div>
 
