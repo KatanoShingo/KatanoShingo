@@ -23,7 +23,7 @@ jobs:
         uses: readme-tools/github-readme-stats-action@v1
         with:
           card: stats
-          options: username=KatanoShingo&show_icons=true&theme=radical&count_private=true
+          options: username=KatanoShingo&show_icons=true&theme=radical&count_private=true&include_all_commits=true&hide_rank=true&hide=issues,contribs
           path: images/stats.svg
           token: ${{ secrets.GH_PAT }}
 
