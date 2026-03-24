@@ -23,7 +23,7 @@ jobs:
         uses: readme-tools/github-readme-stats-action@v1
         with:
           card: stats
-          options: username=KatanoShingo&show_icons=true&theme=radical&count_private=true&include_all_commits=true&hide=issues,contribs
+          options: username=KatanoShingo&show_icons=true&theme=radical&count_private=true&include_all_commits=true&hide=issues,contribs&hide_border=true
           path: images/stats.svg
           token: ${{ secrets.GH_PAT }}
 
@@ -32,7 +32,7 @@ jobs:
         uses: readme-tools/github-readme-stats-action@v1
         with:
           card: top-langs
-          options: username=KatanoShingo&layout=donut&theme=radical
+          options: username=KatanoShingo&layout=donut&theme=radical&hide_border=true
           path: images/top-langs.svg
           token: ${{ secrets.GH_PAT }}
 
