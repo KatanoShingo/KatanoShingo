@@ -18,12 +18,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Stats画像の生成（count_private=true でPrivateも合算！）
+      # Stats画像の生成（ランク表示、全期間合算、0の項目は非表示）
       - name: Generate GitHub Stats SVG
         uses: readme-tools/github-readme-stats-action@v1
         with:
           card: stats
-          options: username=KatanoShingo&show_icons=true&theme=radical&count_private=true&include_all_commits=true&hide_rank=true&hide=issues,contribs
+          options: username=KatanoShingo&show_icons=true&theme=radical&count_private=true&include_all_commits=true&hide=issues,contribs
           path: images/stats.svg
           token: ${{ secrets.GH_PAT }}
 
@@ -42,4 +42,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add images/*.svg
           git commit -m "Update GitHub Stats" || echo "No changes to commit"
+          git pull --rebase
           git push
