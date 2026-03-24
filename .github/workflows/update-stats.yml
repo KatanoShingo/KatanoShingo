@@ -32,7 +32,7 @@ jobs:
         uses: readme-tools/github-readme-stats-action@v1
         with:
           card: top-langs
-          options: username=KatanoShingo&layout=compact&theme=radical
+          options: username=KatanoShingo&layout=donut&theme=radical
           path: images/top-langs.svg
           token: ${{ secrets.GH_PAT }}
 
