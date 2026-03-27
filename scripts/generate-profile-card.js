@@ -4,9 +4,7 @@ const GITHUB_TOKEN = process.env.GH_PAT || process.env.GITHUB_TOKEN;
 const USERNAME = process.env.GH_USERNAME || "KatanoShingo";
 const OUTPUT = process.env.OUTPUT_FILE || "github-custom-card.svg";
 
-if (!GITHUB_TOKEN) {
-  throw new Error("Missing token. Set GH_PAT or GITHUB_TOKEN.");
-}
+if (!GITHUB_TOKEN) throw new Error("Missing token. Set GH_PAT or GITHUB_TOKEN.");
 
 async function graphql(query, variables = {}) {
   const res = await fetch("https://api.github.com/graphql", {
@@ -18,39 +16,35 @@ async function graphql(query, variables = {}) {
     },
     body: JSON.stringify({ query, variables }),
   });
-
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`GraphQL request failed (${res.status}): ${body}`);
-  }
-
+  if (!res.ok) throw new Error(`GraphQL request failed (${res.status}): ${await res.text()}`);
   const data = await res.json();
-  if (data.errors?.length) {
-    throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
-  }
+  if (data.errors?.length) throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
   return data.data;
 }
 
-function gradeRank(score) {
-  if (score >= 95) return "S";
-  if (score >= 85) return "A+";
-  if (score >= 75) return "A";
-  if (score >= 65) return "B+";
-  if (score >= 55) return "B";
-  if (score >= 45) return "C+";
-  if (score >= 35) return "C";
-  return "D";
+async function toDataUri(url) {
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${GITHUB_TOKEN}` } });
+  if (!res.ok) throw new Error(`Avatar fetch failed (${res.status})`);
+  const mime = res.headers.get("content-type") || "image/png";
+  const buffer = Buffer.from(await res.arrayBuffer());
+  return `data:${mime};base64,${buffer.toString("base64")}`;
 }
 
-function clamp(n, min, max) {
-  return Math.max(min, Math.min(max, n));
+function clamp(v, min, max) {
+  return Math.max(min, Math.min(max, v));
 }
 
-function formatNum(value) {
-  return new Intl.NumberFormat("en-US").format(value || 0);
+function formatNum(v) {
+  return new Intl.NumberFormat("ja-JP").format(v || 0);
 }
 
-function formatBytes(kb) {
+function formatBytes(bytes) {
+  const mb = (bytes || 0) / (1024 * 1024);
+  if (mb >= 1024) return `${(mb / 1024).toFixed(1)} GB`;
+  return `${mb.toFixed(1)} MB`;
+}
+
+function formatKB(kb) {
   const mb = (kb || 0) / 1024;
   if (mb >= 1024) return `${(mb / 1024).toFixed(1)} GB`;
   return `${mb.toFixed(1)} MB`;
@@ -65,20 +59,50 @@ function escapeXml(value) {
     .replaceAll("'", "&apos;");
 }
 
-async function fetchUserAndContributions() {
+function yearsSince(dateIso) {
+  const start = new Date(dateIso);
+  const now = new Date();
+  let years = now.getUTCFullYear() - start.getUTCFullYear();
+  const notYetBirthday =
+    now.getUTCMonth() < start.getUTCMonth() ||
+    (now.getUTCMonth() === start.getUTCMonth() && now.getUTCDate() < start.getUTCDate());
+  if (notYetBirthday) years -= 1;
+  return Math.max(0, years);
+}
+
+function gradeRank(score) {
+  if (score >= 95) return "S";
+  if (score >= 88) return "A+";
+  if (score >= 80) return "A";
+  if (score >= 72) return "B+";
+  if (score >= 64) return "B";
+  if (score >= 56) return "C+";
+  if (score >= 48) return "C";
+  return "D";
+}
+
+async function fetchUserSummary() {
   const query = `
     query($login: String!) {
       user(login: $login) {
         login
         name
-        avatarUrl(size: 72)
+        avatarUrl(size: 96)
+        createdAt
         followers { totalCount }
+        following { totalCount }
         repositories(ownerAffiliations: OWNER, isFork: false, first: 1) { totalCount }
         repositoriesContributedTo(contributionTypes: [COMMIT, PULL_REQUEST, ISSUE], first: 1) { totalCount }
         pullRequests(states: [OPEN, MERGED, CLOSED]) { totalCount }
         issues(states: [OPEN, CLOSED]) { totalCount }
+        issueComments { totalCount }
+        organizations(first: 1) { totalCount }
+        starredRepositories(ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER], first: 1) { totalCount }
+        watching(first: 1) { totalCount }
+        sponsorshipsAsMaintainer(first: 1) { totalCount }
         contributionsCollection {
           totalCommitContributions
+          totalPullRequestReviewContributions
         }
       }
     }
@@ -87,9 +111,11 @@ async function fetchUserAndContributions() {
   return data.user;
 }
 
-async function fetchLanguageStats() {
+async function fetchLanguageAndRepoStats() {
   const languageMap = new Map();
   let totalStars = 0;
+  let totalForks = 0;
+  let totalDiskUsageKB = 0;
   let after = null;
 
   const query = `
@@ -99,6 +125,8 @@ async function fetchLanguageStats() {
           pageInfo { hasNextPage endCursor }
           nodes {
             stargazerCount
+            forkCount
+            diskUsage
             languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
               edges {
                 size
@@ -116,150 +144,164 @@ async function fetchLanguageStats() {
     const repos = data.user.repositories;
     for (const repo of repos.nodes || []) {
       totalStars += repo.stargazerCount || 0;
+      totalForks += repo.forkCount || 0;
+      totalDiskUsageKB += repo.diskUsage || 0;
       for (const edge of repo.languages.edges || []) {
-        const key = edge.node.name;
-        const prev = languageMap.get(key) || { size: 0, color: edge.node.color || "#8b949e" };
+        const prev = languageMap.get(edge.node.name) || { size: 0, color: edge.node.color || "#8b949e" };
         prev.size += edge.size || 0;
         if (!prev.color && edge.node.color) prev.color = edge.node.color;
-        languageMap.set(key, prev);
+        languageMap.set(edge.node.name, prev);
       }
     }
     if (!repos.pageInfo.hasNextPage) break;
     after = repos.pageInfo.endCursor;
   }
 
-  const total = [...languageMap.values()].reduce((acc, item) => acc + item.size, 0);
-  const top = [...languageMap.entries()]
+  const totalLangSize = [...languageMap.values()].reduce((acc, x) => acc + x.size, 0);
+  const topLanguages = [...languageMap.entries()]
     .map(([name, value]) => ({ name, ...value }))
     .sort((a, b) => b.size - a.size)
-    .slice(0, 6)
-    .map((x) => ({
-      ...x,
-      percent: total > 0 ? (x.size / total) * 100 : 0,
-    }));
+    .slice(0, 8)
+    .map((lang) => ({ ...lang, percent: totalLangSize > 0 ? (lang.size / totalLangSize) * 100 : 0 }));
 
-  return { top, totalSize: total, totalStars };
+  return { topLanguages, totalStars, totalForks, totalDiskUsageKB };
 }
 
 function buildSvg(model) {
-  const width = 880;
-  const height = 390;
-  const ringRadius = 56;
+  const width = 920;
+  const height = 500;
+  const ringRadius = 64;
   const ringStroke = 12;
-  const ringCircumference = 2 * Math.PI * ringRadius;
+  const ringCirc = 2 * Math.PI * ringRadius;
   const ringProgress = clamp(model.score, 0, 100);
-  const dashOffset = ringCircumference * (1 - ringProgress / 100);
+  const ringOffset = ringCirc * (1 - ringProgress / 100);
 
-  const totalBarWidth = 760;
-  let barX = 60;
-  const barY = 280;
-
-  const languageSegments = model.languages
+  const barWidth = 820;
+  let cursorX = 50;
+  const barY = 380;
+  const segments = model.languages
     .map((lang) => {
-      const widthPart = (lang.percent / 100) * totalBarWidth;
-      const seg = `<rect x="${barX.toFixed(2)}" y="${barY}" width="${widthPart.toFixed(2)}" height="12" fill="${escapeXml(
+      const w = Math.max(2, (lang.percent / 100) * barWidth);
+      const frag = `<rect x="${cursorX.toFixed(2)}" y="${barY}" width="${w.toFixed(2)}" height="12" fill="${escapeXml(
         lang.color || "#8b949e"
-      )}" rx="2" ry="2" />`;
-      barX += widthPart;
-      return seg;
+      )}" rx="2"/>`;
+      cursorX += w;
+      return frag;
     })
     .join("");
 
   const languageRows = model.languages
-    .map((lang, idx) => {
-      const col = idx % 2;
-      const row = Math.floor(idx / 2);
-      const x = col === 0 ? 60 : 450;
-      const y = 320 + row * 22;
-      return `
-      <circle cx="${x}" cy="${y}" r="5" fill="${escapeXml(lang.color || "#8b949e")}" />
-      <text x="${x + 14}" y="${y + 5}" fill="#c9d1d9" font-size="18">${escapeXml(lang.name)}</text>
-      <text x="${x + 170}" y="${y + 5}" fill="#8b949e" font-size="16">${formatBytes(lang.size / 1024)}</text>
-      <text x="${x + 270}" y="${y + 5}" fill="#8b949e" font-size="16">${lang.percent.toFixed(2)}%</text>
-      `;
+    .slice(0, 8)
+    .map((lang, i) => {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const x = col === 0 ? 50 : 470;
+      const y = 410 + row * 24;
+      return `<circle cx="${x}" cy="${y}" r="5" fill="${escapeXml(lang.color || "#8b949e")}"/>
+<text x="${x + 14}" y="${y + 5}" class="fg" font-size="18">${escapeXml(lang.name)}</text>
+<text x="${x + 170}" y="${y + 5}" class="muted" font-size="16">${formatBytes(lang.size)}</text>
+<text x="${x + 285}" y="${y + 5}" class="muted" font-size="16">${lang.percent.toFixed(2)}%</text>`;
     })
     .join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Custom GitHub profile card">
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Shingo custom profile card">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d1117"/>
-      <stop offset="100%" stop-color="#161b22"/>
-    </linearGradient>
     <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#58a6ff"/>
       <stop offset="100%" stop-color="#f778ba"/>
     </linearGradient>
     <style>
-      text { font-family: "Segoe UI", Ubuntu, Sans-Serif; }
+      text { font-family: "Segoe UI", "Noto Sans JP", "Yu Gothic UI", sans-serif; }
+      .primary { fill: #0969da; }
+      .fg { fill: #24292f; }
+      .muted { fill: #57606a; }
+      .good { fill: #1a7f37; }
+      .line { stroke: #d0d7de; }
+      @media (prefers-color-scheme: dark) {
+        .primary { fill: #58a6ff; }
+        .fg { fill: #c9d1d9; }
+        .muted { fill: #8b949e; }
+        .good { fill: #7ee787; }
+        .line { stroke: #30363d; }
+      }
     </style>
   </defs>
 
-  <rect x="8" y="8" width="${width - 16}" height="${height - 16}" rx="14" fill="url(#bg)" stroke="#30363d" stroke-width="2"/>
-  <image href="${escapeXml(model.avatarUrl)}" x="34" y="28" width="44" height="44" clip-path="inset(0 round 22px)" />
-  <text x="90" y="58" fill="#58a6ff" font-size="38" font-weight="700">${escapeXml(model.username)}</text>
-  <text x="60" y="104" fill="#8b949e" font-size="22">Followers ${formatNum(model.followers)}   •   Contributed repos ${formatNum(
-    model.contributedRepos
-  )}</text>
+  <rect x="10" y="10" width="${width - 20}" height="${height - 20}" rx="14" fill="none" class="line" stroke-width="2"/>
+  <clipPath id="avatarClip"><circle cx="46" cy="46" r="24"/></clipPath>
+  <image href="${escapeXml(model.avatarDataUri)}" x="22" y="22" width="48" height="48" clip-path="url(#avatarClip)"/>
+  <text x="82" y="54" class="primary" font-size="44" font-weight="700">${escapeXml(model.displayName)}</text>
+  <text x="50" y="92" class="muted" font-size="30">🕒 GitHub歴 ${model.githubYears}年</text>
+  <text x="500" y="92" class="muted" font-size="30">👥 フォロワー ${formatNum(model.followers)}人</text>
 
-  <text x="60" y="148" fill="#7ee787" font-size="30" font-weight="700">Activity</text>
-  <text x="60" y="182" fill="#c9d1d9" font-size="24">Commits: ${formatNum(model.totalCommits)}</text>
-  <text x="60" y="212" fill="#c9d1d9" font-size="24">Pull Requests: ${formatNum(model.totalPRs)}</text>
-  <text x="60" y="242" fill="#c9d1d9" font-size="24">Issues: ${formatNum(model.totalIssues)}</text>
-  <text x="450" y="182" fill="#c9d1d9" font-size="24">Repositories: ${formatNum(model.totalRepos)}</text>
-  <text x="450" y="212" fill="#c9d1d9" font-size="24">Stars: ${formatNum(model.totalStars)}</text>
+  <text x="50" y="140" class="primary" font-size="34" font-weight="700">📈 アクティビティ</text>
+  <text x="50" y="174" class="fg" font-size="28">• コミット: ${formatNum(model.totalCommits)}</text>
+  <text x="50" y="206" class="fg" font-size="28">• PR作成: ${formatNum(model.totalPRs)}</text>
+  <text x="50" y="238" class="fg" font-size="28">• PRレビュー: ${formatNum(model.totalReviews)}</text>
+  <text x="50" y="270" class="fg" font-size="28">• Issues: ${formatNum(model.totalIssues)}</text>
+  <text x="50" y="302" class="fg" font-size="28">• コメント: ${formatNum(model.totalIssueComments)}</text>
 
-  <text x="640" y="148" fill="#79c0ff" font-size="28" font-weight="700">Rank</text>
-  <circle cx="720" cy="208" r="${ringRadius}" fill="none" stroke="#30363d" stroke-width="${ringStroke}" />
-  <circle
-    cx="720"
-    cy="208"
-    r="${ringRadius}"
-    fill="none"
-    stroke="url(#ring)"
-    stroke-width="${ringStroke}"
-    stroke-linecap="round"
-    transform="rotate(-90 720 208)"
-    stroke-dasharray="${ringCircumference.toFixed(2)}"
-    stroke-dashoffset="${dashOffset.toFixed(2)}"
-  />
-  <text x="720" y="214" fill="#a5f3fc" font-size="34" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
-  <text x="720" y="240" fill="#8b949e" font-size="14" text-anchor="middle">score ${model.score.toFixed(1)}</text>
+  <text x="470" y="140" class="primary" font-size="34" font-weight="700">🌐 コミュニティ</text>
+  <text x="470" y="174" class="fg" font-size="28">• 参加リポジトリ: ${formatNum(model.contributedRepos)}</text>
+  <text x="470" y="206" class="fg" font-size="28">• 所有リポジトリ: ${formatNum(model.totalRepos)}</text>
+  <text x="470" y="238" class="fg" font-size="28">• 総スター獲得: ${formatNum(model.totalStars)}</text>
+  <text x="470" y="270" class="fg" font-size="28">• フォーク獲得: ${formatNum(model.totalForks)}</text>
+  <text x="470" y="302" class="fg" font-size="28">• フォロー中: ${formatNum(model.following)}人</text>
+  <text x="470" y="334" class="fg" font-size="28">• スター付け: ${formatNum(model.starred)}件 / 所属組織: ${formatNum(model.organizations)}</text>
 
-  <text x="60" y="265" fill="#58a6ff" font-size="26" font-weight="700">Top Languages</text>
-  <rect x="60" y="${barY}" width="${totalBarWidth}" height="12" fill="#21262d" rx="6" ry="6"/>
-  ${languageSegments}
+  <text x="760" y="142" class="primary" font-size="30" font-weight="700">ランク</text>
+  <circle cx="790" cy="225" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
+  <circle cx="790" cy="225" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
+    transform="rotate(-90 790 225)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
+  <text x="790" y="232" class="good" font-size="42" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
+  <text x="790" y="258" class="muted" font-size="16" text-anchor="middle">score ${model.score.toFixed(1)}</text>
+
+  <text x="50" y="365" class="primary" font-size="34" font-weight="700">🧠 使用言語（上位）</text>
+  <rect x="50" y="${barY}" width="${barWidth}" height="12" fill="none" class="line" rx="6"/>
+  ${segments}
   ${languageRows}
 
-  <text x="820" y="372" fill="#6e7681" font-size="12" text-anchor="end">Updated ${new Date().toISOString().slice(0, 10)}</text>
+  <text x="870" y="490" class="muted" font-size="13" text-anchor="end">更新日 ${new Date().toISOString().slice(0, 10)} ・ generated by GitHub Actions</text>
+  <text x="50" y="490" class="muted" font-size="13">リポジトリ使用量: ${formatKB(model.totalDiskUsageKB)} / スポンサー: ${formatNum(model.sponsors)}件 / ウォッチ: ${formatNum(model.watching)}件</text>
 </svg>`;
 }
 
 async function main() {
-  const user = await fetchUserAndContributions();
-  const languageStats = await fetchLanguageStats();
+  const user = await fetchUserSummary();
+  const repoStats = await fetchLanguageAndRepoStats();
+  const avatarDataUri = await toDataUri(user.avatarUrl);
 
   const score =
-    clamp(Math.log10((user.contributionsCollection.totalCommitContributions || 0) + 1) * 22, 0, 40) +
-    clamp(Math.log10((user.pullRequests.totalCount || 0) + 1) * 18, 0, 25) +
-    clamp(Math.log10((user.issues.totalCount || 0) + 1) * 12, 0, 15) +
-    clamp(Math.log10((user.followers.totalCount || 0) + 1) * 14, 0, 20);
+    clamp(Math.log10((user.contributionsCollection.totalCommitContributions || 0) + 1) * 24, 0, 38) +
+    clamp(Math.log10((user.pullRequests.totalCount || 0) + 1) * 18, 0, 23) +
+    clamp(Math.log10((user.contributionsCollection.totalPullRequestReviewContributions || 0) + 1) * 16, 0, 21) +
+    clamp(Math.log10((user.issues.totalCount || 0) + 1) * 10, 0, 12) +
+    clamp(Math.log10((user.followers.totalCount || 0) + 1) * 8, 0, 10);
 
-  const totalStars = languageStats.totalStars;
   const model = {
-    username: user.name || user.login,
-    avatarUrl: user.avatarUrl,
+    displayName: user.name || user.login,
+    avatarDataUri,
+    githubYears: yearsSince(user.createdAt),
     followers: user.followers.totalCount || 0,
+    following: user.following.totalCount || 0,
     contributedRepos: user.repositoriesContributedTo.totalCount || 0,
     totalCommits: user.contributionsCollection.totalCommitContributions || 0,
     totalPRs: user.pullRequests.totalCount || 0,
+    totalReviews: user.contributionsCollection.totalPullRequestReviewContributions || 0,
     totalIssues: user.issues.totalCount || 0,
+    totalIssueComments: user.issueComments.totalCount || 0,
     totalRepos: user.repositories.totalCount || 0,
-    totalStars,
+    totalStars: repoStats.totalStars,
+    totalForks: repoStats.totalForks,
+    totalDiskUsageKB: repoStats.totalDiskUsageKB,
+    starred: user.starredRepositories.totalCount || 0,
+    organizations: user.organizations.totalCount || 0,
+    sponsors: user.sponsorshipsAsMaintainer.totalCount || 0,
+    watching: user.watching.totalCount || 0,
     score,
     rank: gradeRank(score),
-    languages: languageStats.top,
+    languages: repoStats.topLanguages,
   };
 
   const svg = buildSvg(model);
