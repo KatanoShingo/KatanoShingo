@@ -30,6 +30,19 @@ async function toDataUri(url) {
   return `data:${mime};base64,${buffer.toString("base64")}`;
 }
 
+async function fetchPublicOrganizationsCount(login) {
+  const res = await fetch(`https://api.github.com/users/${encodeURIComponent(login)}/orgs`, {
+    headers: {
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      "User-Agent": "profile-card-generator",
+      Accept: "application/vnd.github+json",
+    },
+  });
+  if (!res.ok) return 0;
+  const data = await res.json();
+  return Array.isArray(data) ? data.length : 0;
+}
+
 function clamp(v, min, max) {
   return Math.max(min, Math.min(max, v));
 }
@@ -92,7 +105,12 @@ async function fetchUserSummary() {
         followers { totalCount }
         following { totalCount }
         repositories(ownerAffiliations: OWNER, isFork: false, first: 1) { totalCount }
-        repositoriesContributedTo(contributionTypes: [COMMIT, PULL_REQUEST, ISSUE], first: 1) { totalCount }
+        repositoriesContributedTo(
+          contributionTypes: [COMMIT, PULL_REQUEST, ISSUE]
+          ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]
+          includeUserRepositories: true
+          first: 1
+        ) { totalCount }
         pullRequests(states: [OPEN, MERGED, CLOSED]) { totalCount }
         issues(states: [OPEN, CLOSED]) { totalCount }
         issueComments { totalCount }
@@ -116,6 +134,7 @@ async function fetchLanguageAndRepoStats() {
   let totalStars = 0;
   let totalForks = 0;
   let totalDiskUsageKB = 0;
+  let totalReleases = 0;
   let after = null;
 
   const query = `
@@ -127,6 +146,7 @@ async function fetchLanguageAndRepoStats() {
             stargazerCount
             forkCount
             diskUsage
+            releases(first: 1) { totalCount }
             languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
               edges {
                 size
@@ -146,6 +166,7 @@ async function fetchLanguageAndRepoStats() {
       totalStars += repo.stargazerCount || 0;
       totalForks += repo.forkCount || 0;
       totalDiskUsageKB += repo.diskUsage || 0;
+      totalReleases += repo.releases?.totalCount || 0;
       for (const edge of repo.languages.edges || []) {
         const prev = languageMap.get(edge.node.name) || { size: 0, color: edge.node.color || "#8b949e" };
         prev.size += edge.size || 0;
@@ -164,7 +185,7 @@ async function fetchLanguageAndRepoStats() {
     .slice(0, 8)
     .map((lang) => ({ ...lang, percent: totalLangSize > 0 ? (lang.size / totalLangSize) * 100 : 0 }));
 
-  return { topLanguages, totalStars, totalForks, totalDiskUsageKB, languageCount: languageMap.size };
+  return { topLanguages, totalStars, totalForks, totalDiskUsageKB, totalReleases, languageCount: languageMap.size };
 }
 
 function buildSvg(model) {
@@ -235,7 +256,7 @@ function buildSvg(model) {
   <text x="82" y="54" class="primary" font-size="28" font-weight="700">${escapeXml(model.displayName)}</text>
   <text x="82" y="78" class="muted" font-size="15">Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
   <text x="450" y="78" class="muted" font-size="15">Followers（フォロワー）${formatNum(model.followers)} / Following（フォロー中）${formatNum(model.following)}</text>
-  <text x="450" y="98" class="muted" font-size="14">Total Repos（総リポジトリ数）${formatNum(model.totalRepos)} / Total Commits（総コミット数）${formatNum(model.totalCommits)}</text>
+  <text x="450" y="98" class="muted" font-size="14">Total Repos（総リポジトリ数）${formatNum(model.totalRepos)} / Total Commits（総コミット数）${formatNum(model.totalCommits)} / Contributed（貢献リポジトリ数）${formatNum(model.contributedRepos)}</text>
 
   <!-- Top row: left Activity / right Community -->
   <rect x="28" y="108" width="414" height="228" rx="10" fill="none" class="line" stroke-width="1.5"/>
@@ -250,7 +271,7 @@ function buildSvg(model) {
   <text x="50" y="276" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
   <text x="50" y="300" class="fg" font-size="15">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
 
-  <line x1="732" y1="118" x2="732" y2="324" class="line" stroke-width="1"/>
+  <line x1="732" y1="118" x2="732" y2="330" class="line" stroke-width="1"/>
   <text x="474" y="135" class="primary" font-size="24" font-weight="700">Community</text>
   <text x="474" y="154" class="muted" font-size="13">（コミュニティ）</text>
   <text x="474" y="180" class="fg" font-size="14">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
@@ -258,7 +279,8 @@ function buildSvg(model) {
   <text x="474" y="224" class="fg" font-size="14">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
   <text x="474" y="246" class="fg" font-size="14">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
   <text x="474" y="268" class="fg" font-size="14">• Starred（スター付け）: ${formatNum(model.starred)}</text>
-  <text x="474" y="290" class="fg" font-size="14">• Orgs / Sponsors（組織/スポンサー）: ${formatNum(model.organizations)} / ${formatNum(model.sponsors)}</text>
+  <text x="474" y="290" class="fg" font-size="14">• Organizations（所属組織）: ${formatNum(model.organizations)}</text>
+  <text x="474" y="312" class="fg" font-size="14">• Releases（リリース数）: ${formatNum(model.totalReleases)}</text>
 
   <text x="810" y="135" class="primary" font-size="18" text-anchor="middle" font-weight="700">Rank</text>
   <text x="810" y="152" class="muted" font-size="12" text-anchor="middle">（ランク）</text>
@@ -285,6 +307,7 @@ async function main() {
   const user = await fetchUserSummary();
   const repoStats = await fetchLanguageAndRepoStats();
   const avatarDataUri = await toDataUri(user.avatarUrl);
+  const publicOrganizationsCount = await fetchPublicOrganizationsCount(user.login);
 
   const score =
     clamp(Math.log10((user.contributionsCollection.totalCommitContributions || 0) + 1) * 24, 0, 38) +
@@ -309,9 +332,10 @@ async function main() {
     totalStars: repoStats.totalStars,
     totalForks: repoStats.totalForks,
     totalDiskUsageKB: repoStats.totalDiskUsageKB,
+    totalReleases: repoStats.totalReleases,
     languageCount: repoStats.languageCount,
     starred: user.starredRepositories.totalCount || 0,
-    organizations: user.organizations.totalCount || 0,
+    organizations: Math.max(user.organizations.totalCount || 0, publicOrganizationsCount),
     sponsors: user.sponsorshipsAsMaintainer.totalCount || 0,
     watching: user.watching.totalCount || 0,
     score,
