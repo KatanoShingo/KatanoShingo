@@ -240,28 +240,32 @@ function buildSvg(model) {
   <rect x="28" y="96" width="414" height="240" rx="10" fill="none" class="line" stroke-width="1.5"/>
   <rect x="452" y="96" width="440" height="240" rx="10" fill="none" class="line" stroke-width="1.5"/>
 
-  <text x="50" y="125" class="primary" font-size="24" font-weight="700">Activity（アクティビティ）</text>
-  <text x="50" y="155" class="fg" font-size="15">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
-  <text x="50" y="181" class="fg" font-size="15">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
-  <text x="50" y="207" class="fg" font-size="15">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
-  <text x="50" y="233" class="fg" font-size="15">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
-  <text x="50" y="259" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
-  <text x="50" y="285" class="fg" font-size="15">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
+  <text x="50" y="125" class="primary" font-size="24" font-weight="700">Activity</text>
+  <text x="50" y="144" class="muted" font-size="13">（アクティビティ）</text>
+  <text x="50" y="170" class="fg" font-size="15">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
+  <text x="50" y="196" class="fg" font-size="15">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
+  <text x="50" y="222" class="fg" font-size="15">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
+  <text x="50" y="248" class="fg" font-size="15">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
+  <text x="50" y="274" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
+  <text x="50" y="300" class="fg" font-size="15">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
 
-  <text x="474" y="125" class="primary" font-size="24" font-weight="700">Community（コミュニティ）</text>
-  <text x="474" y="155" class="fg" font-size="15">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
-  <text x="474" y="181" class="fg" font-size="15">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
-  <text x="474" y="207" class="fg" font-size="15">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
-  <text x="474" y="233" class="fg" font-size="15">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
-  <text x="474" y="259" class="fg" font-size="15">• Starred（スター付け）: ${formatNum(model.starred)}</text>
-  <text x="474" y="285" class="fg" font-size="15">• Orgs / Sponsors（組織/スポンサー）: ${formatNum(model.organizations)} / ${formatNum(model.sponsors)}</text>
+  <line x1="732" y1="108" x2="732" y2="324" class="line" stroke-width="1"/>
+  <text x="474" y="125" class="primary" font-size="24" font-weight="700">Community</text>
+  <text x="474" y="144" class="muted" font-size="13">（コミュニティ）</text>
+  <text x="474" y="170" class="fg" font-size="14">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
+  <text x="474" y="194" class="fg" font-size="14">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
+  <text x="474" y="218" class="fg" font-size="14">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
+  <text x="474" y="242" class="fg" font-size="14">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
+  <text x="474" y="266" class="fg" font-size="14">• Starred（スター付け）: ${formatNum(model.starred)}</text>
+  <text x="474" y="290" class="fg" font-size="14">• Orgs / Sponsors（組織/スポンサー）: ${formatNum(model.organizations)} / ${formatNum(model.sponsors)}</text>
 
-  <text x="760" y="126" class="primary" font-size="19" font-weight="700">Rank（ランク）</text>
-  <circle cx="790" cy="216" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
-  <circle cx="790" cy="216" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
-    transform="rotate(-90 790 216)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
-  <text x="790" y="223" class="good" font-size="36" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
-  <text x="790" y="246" class="muted" font-size="13" text-anchor="middle">score ${model.score.toFixed(1)}</text>
+  <text x="810" y="125" class="primary" font-size="18" text-anchor="middle" font-weight="700">Rank</text>
+  <text x="810" y="142" class="muted" font-size="12" text-anchor="middle">（ランク）</text>
+  <circle cx="810" cy="220" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
+  <circle cx="810" cy="220" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
+    transform="rotate(-90 810 220)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
+  <text x="810" y="227" class="good" font-size="34" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
+  <text x="810" y="250" class="muted" font-size="12" text-anchor="middle">score ${model.score.toFixed(1)}</text>
 
   <!-- Bottom row: languages + metadata -->
   <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
