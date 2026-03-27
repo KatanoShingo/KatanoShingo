@@ -17,6 +17,7 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           committer_token: ${{ secrets.GH_PAT }}
           filename: github-metrics-personal.svg
+          config_padding: 0, 24 + 16%
 
           base: header, activity, community, repositories, metadata
           base_indepth: yes
