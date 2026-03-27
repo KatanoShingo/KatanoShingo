@@ -235,32 +235,33 @@ function buildSvg(model) {
   <text x="82" y="54" class="primary" font-size="28" font-weight="700">${escapeXml(model.displayName)}</text>
   <text x="82" y="78" class="muted" font-size="15">Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
   <text x="450" y="78" class="muted" font-size="15">Followers（フォロワー）${formatNum(model.followers)} / Following（フォロー中）${formatNum(model.following)}</text>
+  <text x="450" y="98" class="muted" font-size="14">Total Repos（総リポジトリ数）${formatNum(model.totalRepos)} / Total Commits（総コミット数）${formatNum(model.totalCommits)}</text>
 
   <!-- Top row: left Activity / right Community -->
-  <rect x="28" y="96" width="414" height="240" rx="10" fill="none" class="line" stroke-width="1.5"/>
-  <rect x="452" y="96" width="440" height="240" rx="10" fill="none" class="line" stroke-width="1.5"/>
+  <rect x="28" y="108" width="414" height="228" rx="10" fill="none" class="line" stroke-width="1.5"/>
+  <rect x="452" y="108" width="440" height="228" rx="10" fill="none" class="line" stroke-width="1.5"/>
 
-  <text x="50" y="125" class="primary" font-size="24" font-weight="700">Activity</text>
-  <text x="50" y="144" class="muted" font-size="13">（アクティビティ）</text>
-  <text x="50" y="170" class="fg" font-size="15">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
-  <text x="50" y="196" class="fg" font-size="15">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
-  <text x="50" y="222" class="fg" font-size="15">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
-  <text x="50" y="248" class="fg" font-size="15">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
-  <text x="50" y="274" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
+  <text x="50" y="135" class="primary" font-size="24" font-weight="700">Activity</text>
+  <text x="50" y="154" class="muted" font-size="13">（アクティビティ）</text>
+  <text x="50" y="180" class="fg" font-size="15">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
+  <text x="50" y="204" class="fg" font-size="15">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
+  <text x="50" y="228" class="fg" font-size="15">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
+  <text x="50" y="252" class="fg" font-size="15">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
+  <text x="50" y="276" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
   <text x="50" y="300" class="fg" font-size="15">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
 
-  <line x1="732" y1="108" x2="732" y2="324" class="line" stroke-width="1"/>
-  <text x="474" y="125" class="primary" font-size="24" font-weight="700">Community</text>
-  <text x="474" y="144" class="muted" font-size="13">（コミュニティ）</text>
-  <text x="474" y="170" class="fg" font-size="14">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
-  <text x="474" y="194" class="fg" font-size="14">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
-  <text x="474" y="218" class="fg" font-size="14">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
-  <text x="474" y="242" class="fg" font-size="14">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
-  <text x="474" y="266" class="fg" font-size="14">• Starred（スター付け）: ${formatNum(model.starred)}</text>
+  <line x1="732" y1="118" x2="732" y2="324" class="line" stroke-width="1"/>
+  <text x="474" y="135" class="primary" font-size="24" font-weight="700">Community</text>
+  <text x="474" y="154" class="muted" font-size="13">（コミュニティ）</text>
+  <text x="474" y="180" class="fg" font-size="14">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
+  <text x="474" y="202" class="fg" font-size="14">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
+  <text x="474" y="224" class="fg" font-size="14">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
+  <text x="474" y="246" class="fg" font-size="14">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
+  <text x="474" y="268" class="fg" font-size="14">• Starred（スター付け）: ${formatNum(model.starred)}</text>
   <text x="474" y="290" class="fg" font-size="14">• Orgs / Sponsors（組織/スポンサー）: ${formatNum(model.organizations)} / ${formatNum(model.sponsors)}</text>
 
-  <text x="810" y="125" class="primary" font-size="18" text-anchor="middle" font-weight="700">Rank</text>
-  <text x="810" y="142" class="muted" font-size="12" text-anchor="middle">（ランク）</text>
+  <text x="810" y="135" class="primary" font-size="18" text-anchor="middle" font-weight="700">Rank</text>
+  <text x="810" y="152" class="muted" font-size="12" text-anchor="middle">（ランク）</text>
   <circle cx="810" cy="220" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
   <circle cx="810" cy="220" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
     transform="rotate(-90 810 220)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
