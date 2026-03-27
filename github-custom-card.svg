@@ -29,8 +29,8 @@
   <text x="82" y="54" class="primary" font-size="28" font-weight="700">shingo</text>
   <text x="82" y="78" class="muted" font-size="15">Joined 7y ago（GitHub歴 7年）</text>
   <text x="450" y="78" class="muted" font-size="15">Followers（フォロワー）8 / Following（フォロー中）8</text>
-  <text x="450" y="96" class="muted" font-size="13">Total Repos（総リポジトリ数）48 / Total Commits（総コミット数）318</text>
-  <text x="450" y="112" class="muted" font-size="13">Contributed（貢献リポジトリ数）0 / Releases（総リリース数）10</text>
+  <text x="450" y="96" class="muted" font-size="13">Total Repos（総リポジトリ数）48 / Total Commits（総コミット数）1,201</text>
+  <text x="450" y="112" class="muted" font-size="13">Contributed（貢献リポジトリ数）17 / Releases（総リリース数）10</text>
 
   <!-- Top row: left Activity / right Community -->
   <rect x="28" y="122" width="414" height="214" rx="10" fill="none" class="line" stroke-width="1.5"/>
@@ -38,7 +38,7 @@
 
   <text x="50" y="149" class="primary" font-size="24" font-weight="700">Activity</text>
   <text x="50" y="166" class="muted" font-size="13">（アクティビティ）</text>
-  <text x="50" y="190" class="fg" font-size="15">• Commits（コミット）: 318</text>
+  <text x="50" y="190" class="fg" font-size="15">• Commits（コミット）: 1,201</text>
   <text x="50" y="212" class="fg" font-size="15">• PR Opened（PR作成）: 44</text>
   <text x="50" y="234" class="fg" font-size="15">• PR Reviews（PRレビュー）: 0</text>
   <text x="50" y="256" class="fg" font-size="15">• Issues（課題）: 15</text>
@@ -48,7 +48,7 @@
   <line x1="732" y1="132" x2="732" y2="330" class="line" stroke-width="1"/>
   <text x="474" y="149" class="primary" font-size="24" font-weight="700">Community</text>
   <text x="474" y="166" class="muted" font-size="13">（コミュニティ）</text>
-  <text x="474" y="190" class="fg" font-size="14">• Contributed Repos（参加）: 0</text>
+  <text x="474" y="190" class="fg" font-size="14">• Contributed Repos（参加）: 17</text>
   <text x="474" y="211" class="fg" font-size="14">• Owned Repos（所有）: 48</text>
   <text x="474" y="232" class="fg" font-size="14">• Stars Earned（獲得スター）: 9</text>
   <text x="474" y="253" class="fg" font-size="14">• Forks Earned（獲得フォーク）: 1</text>
@@ -67,11 +67,11 @@
   <!-- Bottom row: languages + metadata -->
   <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
   <rect x="50" y="392" width="820" height="11" fill="none" class="line" rx="6"/>
-  <rect x="50.00" y="392" width="606.93" height="11" fill="#178600" rx="2"/><rect x="656.93" y="392" width="136.13" height="11" fill="#222c37" rx="2"/><rect x="793.06" y="392" width="21.33" height="11" fill="#aace60" rx="2"/><rect x="814.39" y="392" width="21.19" height="11" fill="#5686a5" rx="2"/><rect x="835.58" y="392" width="11.11" height="11" fill="#3178c6" rx="2"/><rect x="846.69" y="392" width="5.44" height="11" fill="#f34b7d" rx="2"/><rect x="852.13" y="392" width="4.80" height="11" fill="#b07219" rx="2"/><rect x="856.92" y="392" width="4.19" height="11" fill="#3572A5" rx="2"/>
+  <rect x="50.00" y="392" width="606.92" height="11" fill="#178600" rx="2"/><rect x="656.92" y="392" width="136.13" height="11" fill="#222c37" rx="2"/><rect x="793.05" y="392" width="21.33" height="11" fill="#aace60" rx="2"/><rect x="814.38" y="392" width="21.19" height="11" fill="#5686a5" rx="2"/><rect x="835.57" y="392" width="11.11" height="11" fill="#3178c6" rx="2"/><rect x="846.67" y="392" width="5.44" height="11" fill="#f34b7d" rx="2"/><rect x="852.11" y="392" width="4.80" height="11" fill="#b07219" rx="2"/><rect x="856.91" y="392" width="4.19" height="11" fill="#3572A5" rx="2"/>
   <circle cx="50" cy="421" r="4.5" fill="#178600"/>
 <text x="64" y="426" class="fg" font-size="15">C#</text>
 <text x="220" y="426" class="muted" font-size="14">17.4 MB</text>
-<text x="332" y="426" class="muted" font-size="14">74.02%</text><circle cx="470" cy="421" r="4.5" fill="#222c37"/>
+<text x="332" y="426" class="muted" font-size="14">74.01%</text><circle cx="470" cy="421" r="4.5" fill="#222c37"/>
 <text x="484" y="426" class="fg" font-size="15">ShaderLab</text>
 <text x="640" y="426" class="muted" font-size="14">3.9 MB</text>
 <text x="752" y="426" class="muted" font-size="14">16.60%</text><circle cx="50" cy="445" r="4.5" fill="#aace60"/>
