@@ -95,8 +95,9 @@ function gradeRank(score) {
 }
 
 async function fetchUserSummary() {
+  const since = "2008-01-01T00:00:00Z";
   const query = `
-    query($login: String!) {
+    query($login: String!, $since: DateTime!) {
       user(login: $login) {
         login
         name
@@ -104,7 +105,7 @@ async function fetchUserSummary() {
         createdAt
         followers { totalCount }
         following { totalCount }
-        repositories(ownerAffiliations: OWNER, isFork: false, first: 1) { totalCount }
+        repositories(ownerAffiliations: OWNER, first: 1) { totalCount }
         repositoriesContributedTo(
           contributionTypes: [COMMIT, PULL_REQUEST, ISSUE]
           first: 1
@@ -116,14 +117,14 @@ async function fetchUserSummary() {
         starredRepositories(first: 1) { totalCount }
         watching(first: 1) { totalCount }
         sponsorshipsAsMaintainer(first: 1) { totalCount }
-        contributionsCollection {
+        contributionsCollection(from: $since) {
           totalCommitContributions
           totalPullRequestReviewContributions
         }
       }
     }
   `;
-  const data = await graphql(query, { login: USERNAME });
+  const data = await graphql(query, { login: USERNAME, since });
   return data.user;
 }
 
