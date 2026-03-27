@@ -97,7 +97,7 @@ async function fetchUserSummary() {
         issues(states: [OPEN, CLOSED]) { totalCount }
         issueComments { totalCount }
         organizations(first: 1) { totalCount }
-        starredRepositories(ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER], first: 1) { totalCount }
+        starredRepositories(first: 1) { totalCount }
         watching(first: 1) { totalCount }
         sponsorshipsAsMaintainer(first: 1) { totalCount }
         contributionsCollection {
