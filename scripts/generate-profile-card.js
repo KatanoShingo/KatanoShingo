@@ -170,19 +170,19 @@ async function fetchLanguageAndRepoStats() {
 function buildSvg(model) {
   const width = 920;
   const height = 560;
-  const ringRadius = 64;
-  const ringStroke = 12;
+  const ringRadius = 52;
+  const ringStroke = 11;
   const ringCirc = 2 * Math.PI * ringRadius;
   const ringProgress = clamp(model.score, 0, 100);
   const ringOffset = ringCirc * (1 - ringProgress / 100);
 
   const barWidth = 820;
   let cursorX = 50;
-  const barY = 416;
+  const barY = 392;
   const segments = model.languages
     .map((lang) => {
       const w = Math.max(2, (lang.percent / 100) * barWidth);
-      const frag = `<rect x="${cursorX.toFixed(2)}" y="${barY}" width="${w.toFixed(2)}" height="12" fill="${escapeXml(
+      const frag = `<rect x="${cursorX.toFixed(2)}" y="${barY}" width="${w.toFixed(2)}" height="11" fill="${escapeXml(
         lang.color || "#8b949e"
       )}" rx="2"/>`;
       cursorX += w;
@@ -196,11 +196,11 @@ function buildSvg(model) {
       const col = i % 2;
       const row = Math.floor(i / 2);
       const x = col === 0 ? 50 : 470;
-      const y = 446 + row * 24;
-      return `<circle cx="${x}" cy="${y}" r="5" fill="${escapeXml(lang.color || "#8b949e")}"/>
-<text x="${x + 14}" y="${y + 5}" class="fg" font-size="18">${escapeXml(lang.name)}</text>
-<text x="${x + 170}" y="${y + 5}" class="muted" font-size="16">${formatBytes(lang.size)}</text>
-<text x="${x + 285}" y="${y + 5}" class="muted" font-size="16">${lang.percent.toFixed(2)}%</text>`;
+      const y = 421 + row * 24;
+      return `<circle cx="${x}" cy="${y}" r="4.5" fill="${escapeXml(lang.color || "#8b949e")}"/>
+<text x="${x + 14}" y="${y + 5}" class="fg" font-size="15">${escapeXml(lang.name)}</text>
+<text x="${x + 170}" y="${y + 5}" class="muted" font-size="14">${formatBytes(lang.size)}</text>
+<text x="${x + 282}" y="${y + 5}" class="muted" font-size="14">${lang.percent.toFixed(2)}%</text>`;
     })
     .join("");
 
@@ -229,43 +229,50 @@ function buildSvg(model) {
   </defs>
 
   <rect x="10" y="10" width="${width - 20}" height="${height - 20}" rx="14" fill="none" class="line" stroke-width="2"/>
-  <clipPath id="avatarClip"><circle cx="46" cy="46" r="24"/></clipPath>
-  <image href="${escapeXml(model.avatarDataUri)}" x="22" y="22" width="48" height="48" clip-path="url(#avatarClip)"/>
-  <text x="82" y="54" class="primary" font-size="44" font-weight="700">${escapeXml(model.displayName)}</text>
-  <text x="50" y="92" class="muted" font-size="26">🕒 Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
-  <text x="500" y="92" class="muted" font-size="26">👥 Followers（フォロワー）${formatNum(model.followers)}</text>
 
-  <text x="50" y="140" class="primary" font-size="34" font-weight="700">📈 Activity（アクティビティ）</text>
-  <text x="50" y="174" class="fg" font-size="26">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
-  <text x="50" y="204" class="fg" font-size="26">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
-  <text x="50" y="234" class="fg" font-size="26">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
-  <text x="50" y="264" class="fg" font-size="26">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
-  <text x="50" y="294" class="fg" font-size="26">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
-  <text x="50" y="324" class="fg" font-size="26">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
+  <clipPath id="avatarClip"><circle cx="48" cy="48" r="23"/></clipPath>
+  <image href="${escapeXml(model.avatarDataUri)}" x="25" y="25" width="46" height="46" clip-path="url(#avatarClip)"/>
+  <text x="82" y="54" class="primary" font-size="28" font-weight="700">${escapeXml(model.displayName)}</text>
+  <text x="82" y="78" class="muted" font-size="15">Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
+  <text x="450" y="78" class="muted" font-size="15">Followers（フォロワー）${formatNum(model.followers)} / Following（フォロー中）${formatNum(model.following)}</text>
 
-  <text x="470" y="140" class="primary" font-size="34" font-weight="700">🌐 Community（コミュニティ）</text>
-  <text x="470" y="174" class="fg" font-size="26">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
-  <text x="470" y="204" class="fg" font-size="26">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
-  <text x="470" y="234" class="fg" font-size="26">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
-  <text x="470" y="264" class="fg" font-size="26">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
-  <text x="470" y="294" class="fg" font-size="26">• Following（フォロー中）: ${formatNum(model.following)}</text>
-  <text x="470" y="324" class="fg" font-size="26">• Starred（スター付け）: ${formatNum(model.starred)}</text>
-  <text x="470" y="354" class="fg" font-size="26">• Orgs / Sponsors（組織/スポンサー）: ${formatNum(model.organizations)} / ${formatNum(model.sponsors)}</text>
+  <!-- Top row: left Activity / right Community -->
+  <rect x="28" y="96" width="414" height="240" rx="10" fill="none" class="line" stroke-width="1.5"/>
+  <rect x="452" y="96" width="440" height="240" rx="10" fill="none" class="line" stroke-width="1.5"/>
 
-  <text x="730" y="142" class="primary" font-size="28" font-weight="700">Rank（ランク）</text>
-  <circle cx="790" cy="225" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
-  <circle cx="790" cy="225" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
-    transform="rotate(-90 790 225)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
-  <text x="790" y="232" class="good" font-size="42" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
-  <text x="790" y="258" class="muted" font-size="16" text-anchor="middle">score ${model.score.toFixed(1)}</text>
+  <text x="50" y="125" class="primary" font-size="24" font-weight="700">Activity（アクティビティ）</text>
+  <text x="50" y="155" class="fg" font-size="15">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
+  <text x="50" y="181" class="fg" font-size="15">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
+  <text x="50" y="207" class="fg" font-size="15">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
+  <text x="50" y="233" class="fg" font-size="15">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
+  <text x="50" y="259" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
+  <text x="50" y="285" class="fg" font-size="15">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
 
-  <text x="50" y="400" class="primary" font-size="34" font-weight="700">🧠 Top Languages（使用言語）</text>
-  <rect x="50" y="${barY}" width="${barWidth}" height="12" fill="none" class="line" rx="6"/>
+  <text x="474" y="125" class="primary" font-size="24" font-weight="700">Community（コミュニティ）</text>
+  <text x="474" y="155" class="fg" font-size="15">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
+  <text x="474" y="181" class="fg" font-size="15">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
+  <text x="474" y="207" class="fg" font-size="15">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
+  <text x="474" y="233" class="fg" font-size="15">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
+  <text x="474" y="259" class="fg" font-size="15">• Starred（スター付け）: ${formatNum(model.starred)}</text>
+  <text x="474" y="285" class="fg" font-size="15">• Orgs / Sponsors（組織/スポンサー）: ${formatNum(model.organizations)} / ${formatNum(model.sponsors)}</text>
+
+  <text x="760" y="126" class="primary" font-size="19" font-weight="700">Rank（ランク）</text>
+  <circle cx="790" cy="216" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
+  <circle cx="790" cy="216" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
+    transform="rotate(-90 790 216)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
+  <text x="790" y="223" class="good" font-size="36" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
+  <text x="790" y="246" class="muted" font-size="13" text-anchor="middle">score ${model.score.toFixed(1)}</text>
+
+  <!-- Bottom row: languages + metadata -->
+  <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
+  <rect x="50" y="${barY}" width="${barWidth}" height="11" fill="none" class="line" rx="6"/>
   ${segments}
   ${languageRows}
 
-  <text x="50" y="544" class="muted" font-size="13">Disk Usage（使用量）: ${formatKB(model.totalDiskUsageKB)} / Languages（言語数）: ${formatNum(model.languageCount)}</text>
-  <text x="870" y="544" class="muted" font-size="13" text-anchor="end">Updated（更新日）${new Date().toISOString().slice(0, 10)} ・ generated by GitHub Actions</text>
+  <text x="50" y="544" class="muted" font-size="13">Disk Usage（使用量）: ${formatKB(model.totalDiskUsageKB)} / Languages（言語数）: ${formatNum(model.languageCount)} / Updated（更新）: ${new Date()
+    .toISOString()
+    .slice(0, 10)}</text>
+  <text x="870" y="544" class="muted" font-size="13" text-anchor="end">generated by GitHub Actions</text>
 </svg>`;
 }
 
