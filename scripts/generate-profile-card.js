@@ -88,6 +88,13 @@ function yearsSince(dateIso) {
   return Math.max(0, years);
 }
 
+function daysSince(dateIso) {
+  const start = new Date(dateIso);
+  const now = new Date();
+  const diffMs = now.getTime() - start.getTime();
+  return Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+}
+
 function gradeRank(score) {
   if (score >= 95) return "S";
   if (score >= 88) return "A+";
@@ -368,7 +375,9 @@ function buildSvg(model) {
   <clipPath id="avatarClip"><circle cx="48" cy="48" r="23"/></clipPath>
   <image href="${escapeXml(model.avatarDataUri)}" x="25" y="25" width="46" height="46" clip-path="url(#avatarClip)"/>
   <text x="82" y="54" class="primary" font-size="28" font-weight="700">${escapeXml(model.displayName)}</text>
-  <text x="82" y="78" class="muted" font-size="14">Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
+  <text x="82" y="78" class="muted" font-size="14">Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年 / ${formatNum(
+    model.githubDays
+  )}日）</text>
   <text x="450" y="78" class="muted" font-size="14">Followers（フォロワー）${formatNum(model.followers)} / Following（フォロー中）${formatNum(model.following)}</text>
 
   <!-- Top row: left Activity / right Community -->
@@ -416,7 +425,7 @@ function buildSvg(model) {
     model.consistency.current
   )}d / best（最長連続）${formatNum(model.consistency.best)}d / active days（活動日数）${formatNum(
     model.consistency.activeDays
-  )} / total（総貢献数）${formatNum(model.consistency.total)}</text>
+  )} / total（直近1年の貢献数）${formatNum(model.consistency.total)}</text>
   <text x="50" y="576" class="muted" font-size="12">Disk Usage（使用量）: ${formatKB(model.totalDiskUsageKB)} / Languages（言語数）: ${formatNum(
     model.languageCount
   )} / Updated（更新）: ${new Date().toISOString().slice(0, 10)}</text>
@@ -445,6 +454,7 @@ async function main() {
     displayName: user.name || user.login,
     avatarDataUri,
     githubYears: yearsSince(user.createdAt),
+    githubDays: daysSince(user.createdAt),
     followers: user.followers.totalCount || 0,
     following: user.following.totalCount || 0,
     contributedRepos: user.repositoriesContributedTo.totalCount || 0,
