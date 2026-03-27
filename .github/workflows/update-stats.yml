@@ -1,46 +1,32 @@
-name: Generate GitHub Stats
+name: Metrics
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # 毎日自動更新
+  schedule: [{ cron: "0 0 * * *" }]
   workflow_dispatch:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  push: { branches: ["main"] }
 
 jobs:
-  build:
+  github-metrics:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Stats画像の生成（ランク表示、全期間合算、0の項目は非表示）
-      - name: Generate GitHub Stats SVG
-        uses: readme-tools/github-readme-stats-action@v1
+      - uses: lowlighter/metrics@latest
         with:
-          card: stats
-          options: username=KatanoShingo&show_icons=true&theme=radical&count_private=true&include_all_commits=true&hide=issues,contribs&hide_border=true
-          path: images/stats.svg
-          token: ${{ secrets.GH_PAT }}
+          user: KatanoShingo
+          token: ${{ secrets.METRICS_TOKEN }}
+          committer_token: ${{ secrets.METRICS_TOKEN }}
+          filename: github-metrics-personal.svg
 
-      # Top Languages画像の生成
-      - name: Generate Top Languages SVG
-        uses: readme-tools/github-readme-stats-action@v1
-        with:
-          card: top-langs
-          options: username=KatanoShingo&layout=compact&theme=radical&hide_border=true
-          path: images/top-langs.svg
-          token: ${{ secrets.GH_PAT }}
+          base: header, activity, community, repositories, metadata
+          base_indepth: yes
 
-      - name: Commit and Push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add images/*.svg
-          git commit -m "Update GitHub Stats" || echo "No changes to commit"
-          git pull --rebase
-          git push
+          plugin_languages: yes
+          plugin_languages_indepth: no
+          plugin_languages_details: bytes-size, percentage
+          plugin_languages_threshold: 0%
+          plugin_languages_limit: 10
+          plugin_languages_ignored: ""
+
+          repositories_forks: no
+          repositories_affiliations: owner
