@@ -95,9 +95,8 @@ function gradeRank(score) {
 }
 
 async function fetchUserSummary() {
-  const since = "2008-01-01T00:00:00Z";
   const query = `
-    query($login: String!, $since: DateTime!) {
+    query($login: String!) {
       user(login: $login) {
         login
         name
@@ -117,15 +116,39 @@ async function fetchUserSummary() {
         starredRepositories(first: 1) { totalCount }
         watching(first: 1) { totalCount }
         sponsorshipsAsMaintainer(first: 1) { totalCount }
-        contributionsCollection(from: $since) {
+        contributionsCollection {
+          contributionYears
+          totalPullRequestReviewContributions
+        }
+      }
+    }
+  `;
+  const data = await graphql(query, { login: USERNAME });
+  return data.user;
+}
+
+async function fetchAllTimeContributionTotals(login, years) {
+  const query = `
+    query($login: String!, $from: DateTime!, $to: DateTime!) {
+      user(login: $login) {
+        contributionsCollection(from: $from, to: $to) {
           totalCommitContributions
           totalPullRequestReviewContributions
         }
       }
     }
   `;
-  const data = await graphql(query, { login: USERNAME, since });
-  return data.user;
+
+  let totalCommits = 0;
+  let totalReviews = 0;
+  for (const year of years || []) {
+    const from = `${year}-01-01T00:00:00Z`;
+    const to = `${year}-12-31T23:59:59Z`;
+    const data = await graphql(query, { login, from, to });
+    totalCommits += data.user.contributionsCollection.totalCommitContributions || 0;
+    totalReviews += data.user.contributionsCollection.totalPullRequestReviewContributions || 0;
+  }
+  return { totalCommits, totalReviews };
 }
 
 async function fetchLanguageAndRepoStats() {
@@ -255,34 +278,35 @@ function buildSvg(model) {
   <text x="82" y="54" class="primary" font-size="28" font-weight="700">${escapeXml(model.displayName)}</text>
   <text x="82" y="78" class="muted" font-size="15">Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
   <text x="450" y="78" class="muted" font-size="15">Followers（フォロワー）${formatNum(model.followers)} / Following（フォロー中）${formatNum(model.following)}</text>
-  <text x="450" y="98" class="muted" font-size="14">Total Repos（総リポジトリ数）${formatNum(model.totalRepos)} / Total Commits（総コミット数）${formatNum(model.totalCommits)} / Contributed（貢献リポジトリ数）${formatNum(model.contributedRepos)}</text>
+  <text x="450" y="96" class="muted" font-size="13">Total Repos（総リポジトリ数）${formatNum(model.totalRepos)} / Total Commits（総コミット数）${formatNum(model.totalCommits)}</text>
+  <text x="450" y="112" class="muted" font-size="13">Contributed（貢献リポジトリ数）${formatNum(model.contributedRepos)} / Releases（総リリース数）${formatNum(model.totalReleases)}</text>
 
   <!-- Top row: left Activity / right Community -->
-  <rect x="28" y="108" width="414" height="228" rx="10" fill="none" class="line" stroke-width="1.5"/>
-  <rect x="452" y="108" width="440" height="228" rx="10" fill="none" class="line" stroke-width="1.5"/>
+  <rect x="28" y="122" width="414" height="214" rx="10" fill="none" class="line" stroke-width="1.5"/>
+  <rect x="452" y="122" width="440" height="214" rx="10" fill="none" class="line" stroke-width="1.5"/>
 
-  <text x="50" y="135" class="primary" font-size="24" font-weight="700">Activity</text>
-  <text x="50" y="154" class="muted" font-size="13">（アクティビティ）</text>
-  <text x="50" y="180" class="fg" font-size="15">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
-  <text x="50" y="204" class="fg" font-size="15">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
-  <text x="50" y="228" class="fg" font-size="15">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
-  <text x="50" y="252" class="fg" font-size="15">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
-  <text x="50" y="276" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
+  <text x="50" y="149" class="primary" font-size="24" font-weight="700">Activity</text>
+  <text x="50" y="166" class="muted" font-size="13">（アクティビティ）</text>
+  <text x="50" y="190" class="fg" font-size="15">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
+  <text x="50" y="212" class="fg" font-size="15">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
+  <text x="50" y="234" class="fg" font-size="15">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
+  <text x="50" y="256" class="fg" font-size="15">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
+  <text x="50" y="278" class="fg" font-size="15">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
   <text x="50" y="300" class="fg" font-size="15">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
 
-  <line x1="732" y1="118" x2="732" y2="330" class="line" stroke-width="1"/>
-  <text x="474" y="135" class="primary" font-size="24" font-weight="700">Community</text>
-  <text x="474" y="154" class="muted" font-size="13">（コミュニティ）</text>
-  <text x="474" y="180" class="fg" font-size="14">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
-  <text x="474" y="202" class="fg" font-size="14">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
-  <text x="474" y="224" class="fg" font-size="14">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
-  <text x="474" y="246" class="fg" font-size="14">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
-  <text x="474" y="268" class="fg" font-size="14">• Starred（スター付け）: ${formatNum(model.starred)}</text>
-  <text x="474" y="290" class="fg" font-size="14">• Organizations（所属組織）: ${formatNum(model.organizations)}</text>
-  <text x="474" y="312" class="fg" font-size="14">• Releases（リリース数）: ${formatNum(model.totalReleases)}</text>
+  <line x1="732" y1="132" x2="732" y2="330" class="line" stroke-width="1"/>
+  <text x="474" y="149" class="primary" font-size="24" font-weight="700">Community</text>
+  <text x="474" y="166" class="muted" font-size="13">（コミュニティ）</text>
+  <text x="474" y="190" class="fg" font-size="14">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
+  <text x="474" y="211" class="fg" font-size="14">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
+  <text x="474" y="232" class="fg" font-size="14">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
+  <text x="474" y="253" class="fg" font-size="14">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
+  <text x="474" y="274" class="fg" font-size="14">• Starred（スター付け）: ${formatNum(model.starred)}</text>
+  <text x="474" y="295" class="fg" font-size="14">• Organizations（所属組織）: ${formatNum(model.organizations)}</text>
+  <text x="474" y="316" class="fg" font-size="14">• Releases（リリース数）: ${formatNum(model.totalReleases)}</text>
 
-  <text x="810" y="135" class="primary" font-size="18" text-anchor="middle" font-weight="700">Rank</text>
-  <text x="810" y="152" class="muted" font-size="12" text-anchor="middle">（ランク）</text>
+  <text x="810" y="149" class="primary" font-size="18" text-anchor="middle" font-weight="700">Rank</text>
+  <text x="810" y="166" class="muted" font-size="12" text-anchor="middle">（ランク）</text>
   <circle cx="810" cy="220" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
   <circle cx="810" cy="220" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
     transform="rotate(-90 810 220)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
@@ -307,11 +331,12 @@ async function main() {
   const repoStats = await fetchLanguageAndRepoStats();
   const avatarDataUri = await toDataUri(user.avatarUrl);
   const publicOrganizationsCount = await fetchPublicOrganizationsCount(user.login);
+  const allTime = await fetchAllTimeContributionTotals(user.login, user.contributionsCollection.contributionYears);
 
   const score =
-    clamp(Math.log10((user.contributionsCollection.totalCommitContributions || 0) + 1) * 24, 0, 38) +
+    clamp(Math.log10((allTime.totalCommits || 0) + 1) * 24, 0, 38) +
     clamp(Math.log10((user.pullRequests.totalCount || 0) + 1) * 18, 0, 23) +
-    clamp(Math.log10((user.contributionsCollection.totalPullRequestReviewContributions || 0) + 1) * 16, 0, 21) +
+    clamp(Math.log10((allTime.totalReviews || 0) + 1) * 16, 0, 21) +
     clamp(Math.log10((user.issues.totalCount || 0) + 1) * 10, 0, 12) +
     clamp(Math.log10((user.followers.totalCount || 0) + 1) * 8, 0, 10);
 
@@ -322,9 +347,9 @@ async function main() {
     followers: user.followers.totalCount || 0,
     following: user.following.totalCount || 0,
     contributedRepos: user.repositoriesContributedTo.totalCount || 0,
-    totalCommits: user.contributionsCollection.totalCommitContributions || 0,
+    totalCommits: allTime.totalCommits || 0,
     totalPRs: user.pullRequests.totalCount || 0,
-    totalReviews: user.contributionsCollection.totalPullRequestReviewContributions || 0,
+    totalReviews: allTime.totalReviews || 0,
     totalIssues: user.issues.totalCount || 0,
     totalIssueComments: user.issueComments.totalCount || 0,
     totalRepos: user.repositories.totalCount || 0,
