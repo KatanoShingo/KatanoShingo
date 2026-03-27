@@ -107,6 +107,7 @@ async function fetchUserSummary() {
         repositories(ownerAffiliations: OWNER, first: 1) { totalCount }
         repositoriesContributedTo(
           contributionTypes: [COMMIT, PULL_REQUEST, ISSUE]
+          includeUserRepositories: true
           first: 1
         ) { totalCount }
         pullRequests(states: [OPEN, MERGED, CLOSED]) { totalCount }
@@ -157,6 +158,7 @@ async function fetchLanguageAndRepoStats() {
   let totalForks = 0;
   let totalDiskUsageKB = 0;
   let totalReleases = 0;
+  let totalRepoCommits = 0;
   let after = null;
 
   const query = `
@@ -169,6 +171,13 @@ async function fetchLanguageAndRepoStats() {
             forkCount
             diskUsage
             releases(first: 1) { totalCount }
+            defaultBranchRef {
+              target {
+                ... on Commit {
+                  history(first: 1) { totalCount }
+                }
+              }
+            }
             languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
               edges {
                 size
@@ -189,6 +198,7 @@ async function fetchLanguageAndRepoStats() {
       totalForks += repo.forkCount || 0;
       totalDiskUsageKB += repo.diskUsage || 0;
       totalReleases += repo.releases?.totalCount || 0;
+      totalRepoCommits += repo.defaultBranchRef?.target?.history?.totalCount || 0;
       for (const edge of repo.languages.edges || []) {
         const prev = languageMap.get(edge.node.name) || { size: 0, color: edge.node.color || "#8b949e" };
         prev.size += edge.size || 0;
@@ -207,7 +217,15 @@ async function fetchLanguageAndRepoStats() {
     .slice(0, 8)
     .map((lang) => ({ ...lang, percent: totalLangSize > 0 ? (lang.size / totalLangSize) * 100 : 0 }));
 
-  return { topLanguages, totalStars, totalForks, totalDiskUsageKB, totalReleases, languageCount: languageMap.size };
+  return {
+    topLanguages,
+    totalStars,
+    totalForks,
+    totalDiskUsageKB,
+    totalReleases,
+    totalRepoCommits,
+    languageCount: languageMap.size,
+  };
 }
 
 function buildSvg(model) {
@@ -332,9 +350,10 @@ async function main() {
   const avatarDataUri = await toDataUri(user.avatarUrl);
   const publicOrganizationsCount = await fetchPublicOrganizationsCount(user.login);
   const allTime = await fetchAllTimeContributionTotals(user.login, user.contributionsCollection.contributionYears);
+  const totalCommitsForDisplay = Math.max(allTime.totalCommits || 0, repoStats.totalRepoCommits || 0);
 
   const score =
-    clamp(Math.log10((allTime.totalCommits || 0) + 1) * 24, 0, 38) +
+    clamp(Math.log10(totalCommitsForDisplay + 1) * 24, 0, 38) +
     clamp(Math.log10((user.pullRequests.totalCount || 0) + 1) * 18, 0, 23) +
     clamp(Math.log10((allTime.totalReviews || 0) + 1) * 16, 0, 21) +
     clamp(Math.log10((user.issues.totalCount || 0) + 1) * 10, 0, 12) +
@@ -347,7 +366,7 @@ async function main() {
     followers: user.followers.totalCount || 0,
     following: user.following.totalCount || 0,
     contributedRepos: user.repositoriesContributedTo.totalCount || 0,
-    totalCommits: allTime.totalCommits || 0,
+    totalCommits: totalCommitsForDisplay,
     totalPRs: user.pullRequests.totalCount || 0,
     totalReviews: allTime.totalReviews || 0,
     totalIssues: user.issues.totalCount || 0,
