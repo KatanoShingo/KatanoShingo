@@ -296,8 +296,6 @@ function buildSvg(model) {
   <text x="82" y="54" class="primary" font-size="28" font-weight="700">${escapeXml(model.displayName)}</text>
   <text x="82" y="78" class="muted" font-size="14">Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
   <text x="450" y="78" class="muted" font-size="14">Followers（フォロワー）${formatNum(model.followers)} / Following（フォロー中）${formatNum(model.following)}</text>
-  <text x="450" y="95" class="muted" font-size="12">Total Repos（総リポジトリ数）${formatNum(model.totalRepos)} / Total Commits（総コミット数）${formatNum(model.totalCommits)}</text>
-  <text x="450" y="110" class="muted" font-size="12">Contributed（貢献リポジトリ数）${formatNum(model.contributedRepos)} / Releases（総リリース数）${formatNum(model.totalReleases)}</text>
 
   <!-- Top row: left Activity / right Community -->
   <rect x="28" y="132" width="414" height="204" rx="10" fill="none" class="line" stroke-width="1.5"/>
