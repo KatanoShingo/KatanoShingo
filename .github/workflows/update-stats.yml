@@ -14,8 +14,8 @@ jobs:
       - uses: lowlighter/metrics@latest
         with:
           user: KatanoShingo
-          token: ${{ secrets.METRICS_TOKEN }}
-          committer_token: ${{ secrets.METRICS_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
+          committer_token: ${{ secrets.GH_PAT }}
           filename: github-metrics-personal.svg
 
           base: header, activity, community, repositories, metadata
