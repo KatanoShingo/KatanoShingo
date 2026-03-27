@@ -164,12 +164,12 @@ async function fetchLanguageAndRepoStats() {
     .slice(0, 8)
     .map((lang) => ({ ...lang, percent: totalLangSize > 0 ? (lang.size / totalLangSize) * 100 : 0 }));
 
-  return { topLanguages, totalStars, totalForks, totalDiskUsageKB };
+  return { topLanguages, totalStars, totalForks, totalDiskUsageKB, languageCount: languageMap.size };
 }
 
 function buildSvg(model) {
   const width = 920;
-  const height = 500;
+  const height = 560;
   const ringRadius = 64;
   const ringStroke = 12;
   const ringCirc = 2 * Math.PI * ringRadius;
@@ -178,7 +178,7 @@ function buildSvg(model) {
 
   const barWidth = 820;
   let cursorX = 50;
-  const barY = 380;
+  const barY = 416;
   const segments = model.languages
     .map((lang) => {
       const w = Math.max(2, (lang.percent / 100) * barWidth);
@@ -196,7 +196,7 @@ function buildSvg(model) {
       const col = i % 2;
       const row = Math.floor(i / 2);
       const x = col === 0 ? 50 : 470;
-      const y = 410 + row * 24;
+      const y = 446 + row * 24;
       return `<circle cx="${x}" cy="${y}" r="5" fill="${escapeXml(lang.color || "#8b949e")}"/>
 <text x="${x + 14}" y="${y + 5}" class="fg" font-size="18">${escapeXml(lang.name)}</text>
 <text x="${x + 170}" y="${y + 5}" class="muted" font-size="16">${formatBytes(lang.size)}</text>
@@ -232,38 +232,40 @@ function buildSvg(model) {
   <clipPath id="avatarClip"><circle cx="46" cy="46" r="24"/></clipPath>
   <image href="${escapeXml(model.avatarDataUri)}" x="22" y="22" width="48" height="48" clip-path="url(#avatarClip)"/>
   <text x="82" y="54" class="primary" font-size="44" font-weight="700">${escapeXml(model.displayName)}</text>
-  <text x="50" y="92" class="muted" font-size="30">🕒 GitHub歴 ${model.githubYears}年</text>
-  <text x="500" y="92" class="muted" font-size="30">👥 フォロワー ${formatNum(model.followers)}人</text>
+  <text x="50" y="92" class="muted" font-size="26">🕒 Joined ${model.githubYears}y ago（GitHub歴 ${model.githubYears}年）</text>
+  <text x="500" y="92" class="muted" font-size="26">👥 Followers（フォロワー）${formatNum(model.followers)}</text>
 
-  <text x="50" y="140" class="primary" font-size="34" font-weight="700">📈 アクティビティ</text>
-  <text x="50" y="174" class="fg" font-size="28">• コミット: ${formatNum(model.totalCommits)}</text>
-  <text x="50" y="206" class="fg" font-size="28">• PR作成: ${formatNum(model.totalPRs)}</text>
-  <text x="50" y="238" class="fg" font-size="28">• PRレビュー: ${formatNum(model.totalReviews)}</text>
-  <text x="50" y="270" class="fg" font-size="28">• Issues: ${formatNum(model.totalIssues)}</text>
-  <text x="50" y="302" class="fg" font-size="28">• コメント: ${formatNum(model.totalIssueComments)}</text>
+  <text x="50" y="140" class="primary" font-size="34" font-weight="700">📈 Activity（アクティビティ）</text>
+  <text x="50" y="174" class="fg" font-size="26">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
+  <text x="50" y="204" class="fg" font-size="26">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
+  <text x="50" y="234" class="fg" font-size="26">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
+  <text x="50" y="264" class="fg" font-size="26">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
+  <text x="50" y="294" class="fg" font-size="26">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
+  <text x="50" y="324" class="fg" font-size="26">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
 
-  <text x="470" y="140" class="primary" font-size="34" font-weight="700">🌐 コミュニティ</text>
-  <text x="470" y="174" class="fg" font-size="28">• 参加リポジトリ: ${formatNum(model.contributedRepos)}</text>
-  <text x="470" y="206" class="fg" font-size="28">• 所有リポジトリ: ${formatNum(model.totalRepos)}</text>
-  <text x="470" y="238" class="fg" font-size="28">• 総スター獲得: ${formatNum(model.totalStars)}</text>
-  <text x="470" y="270" class="fg" font-size="28">• フォーク獲得: ${formatNum(model.totalForks)}</text>
-  <text x="470" y="302" class="fg" font-size="28">• フォロー中: ${formatNum(model.following)}人</text>
-  <text x="470" y="334" class="fg" font-size="28">• スター付け: ${formatNum(model.starred)}件 / 所属組織: ${formatNum(model.organizations)}</text>
+  <text x="470" y="140" class="primary" font-size="34" font-weight="700">🌐 Community（コミュニティ）</text>
+  <text x="470" y="174" class="fg" font-size="26">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
+  <text x="470" y="204" class="fg" font-size="26">• Owned Repos（所有）: ${formatNum(model.totalRepos)}</text>
+  <text x="470" y="234" class="fg" font-size="26">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
+  <text x="470" y="264" class="fg" font-size="26">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
+  <text x="470" y="294" class="fg" font-size="26">• Following（フォロー中）: ${formatNum(model.following)}</text>
+  <text x="470" y="324" class="fg" font-size="26">• Starred（スター付け）: ${formatNum(model.starred)}</text>
+  <text x="470" y="354" class="fg" font-size="26">• Orgs / Sponsors（組織/スポンサー）: ${formatNum(model.organizations)} / ${formatNum(model.sponsors)}</text>
 
-  <text x="760" y="142" class="primary" font-size="30" font-weight="700">ランク</text>
+  <text x="730" y="142" class="primary" font-size="28" font-weight="700">Rank（ランク）</text>
   <circle cx="790" cy="225" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
   <circle cx="790" cy="225" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
     transform="rotate(-90 790 225)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
   <text x="790" y="232" class="good" font-size="42" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
   <text x="790" y="258" class="muted" font-size="16" text-anchor="middle">score ${model.score.toFixed(1)}</text>
 
-  <text x="50" y="365" class="primary" font-size="34" font-weight="700">🧠 使用言語（上位）</text>
+  <text x="50" y="400" class="primary" font-size="34" font-weight="700">🧠 Top Languages（使用言語）</text>
   <rect x="50" y="${barY}" width="${barWidth}" height="12" fill="none" class="line" rx="6"/>
   ${segments}
   ${languageRows}
 
-  <text x="870" y="490" class="muted" font-size="13" text-anchor="end">更新日 ${new Date().toISOString().slice(0, 10)} ・ generated by GitHub Actions</text>
-  <text x="50" y="490" class="muted" font-size="13">リポジトリ使用量: ${formatKB(model.totalDiskUsageKB)} / スポンサー: ${formatNum(model.sponsors)}件 / ウォッチ: ${formatNum(model.watching)}件</text>
+  <text x="50" y="544" class="muted" font-size="13">Disk Usage（使用量）: ${formatKB(model.totalDiskUsageKB)} / Languages（言語数）: ${formatNum(model.languageCount)}</text>
+  <text x="870" y="544" class="muted" font-size="13" text-anchor="end">Updated（更新日）${new Date().toISOString().slice(0, 10)} ・ generated by GitHub Actions</text>
 </svg>`;
 }
 
@@ -295,6 +297,7 @@ async function main() {
     totalStars: repoStats.totalStars,
     totalForks: repoStats.totalForks,
     totalDiskUsageKB: repoStats.totalDiskUsageKB,
+    languageCount: repoStats.languageCount,
     starred: user.starredRepositories.totalCount || 0,
     organizations: user.organizations.totalCount || 0,
     sponsors: user.sponsorshipsAsMaintainer.totalCount || 0,
