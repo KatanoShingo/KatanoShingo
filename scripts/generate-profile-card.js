@@ -412,11 +412,11 @@ function buildSvg(model) {
   <text x="50" y="538" class="muted" font-size="12">Now Focus（直近90日）: ${escapeXml(
     truncateText(model.nowFocusText, 105)
   )}</text>
-  <text x="50" y="558" class="muted" font-size="12">Consistency（継続性）: current ${formatNum(
+  <text x="50" y="558" class="muted" font-size="12">Consistency（継続性）: current（現在連続）${formatNum(
     model.consistency.current
-  )}d / best ${formatNum(model.consistency.best)}d / active days ${formatNum(model.consistency.activeDays)} / total ${formatNum(
-    model.consistency.total
-  )}</text>
+  )}d / best（最長連続）${formatNum(model.consistency.best)}d / active days（活動日数）${formatNum(
+    model.consistency.activeDays
+  )} / total（総貢献数）${formatNum(model.consistency.total)}</text>
   <text x="50" y="576" class="muted" font-size="12">Disk Usage（使用量）: ${formatKB(model.totalDiskUsageKB)} / Languages（言語数）: ${formatNum(
     model.languageCount
   )} / Updated（更新）: ${new Date().toISOString().slice(0, 10)}</text>
