@@ -30,7 +30,7 @@
   <text x="500" y="92" class="muted" font-size="26">👥 Followers（フォロワー）8</text>
 
   <text x="50" y="140" class="primary" font-size="34" font-weight="700">📈 Activity（アクティビティ）</text>
-  <text x="50" y="174" class="fg" font-size="26">• Commits（コミット）: 49</text>
+  <text x="50" y="174" class="fg" font-size="26">• Commits（コミット）: 50</text>
   <text x="50" y="204" class="fg" font-size="26">• PR Opened（PR作成）: 44</text>
   <text x="50" y="234" class="fg" font-size="26">• PR Reviews（PRレビュー）: 0</text>
   <text x="50" y="264" class="fg" font-size="26">• Issues（課題）: 15</text>
