@@ -107,8 +107,6 @@ async function fetchUserSummary() {
         repositories(ownerAffiliations: OWNER, isFork: false, first: 1) { totalCount }
         repositoriesContributedTo(
           contributionTypes: [COMMIT, PULL_REQUEST, ISSUE]
-          ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]
-          includeUserRepositories: true
           first: 1
         ) { totalCount }
         pullRequests(states: [OPEN, MERGED, CLOSED]) { totalCount }
