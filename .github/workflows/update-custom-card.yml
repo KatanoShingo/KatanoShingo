@@ -1,0 +1,35 @@
+name: Update Custom Profile Card
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-card:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate custom profile card
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_USERNAME: KatanoShingo
+          OUTPUT_FILE: github-custom-card.svg
+        run: node scripts/generate-profile-card.js
+
+      - name: Commit generated card
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update custom profile card"
+          file_pattern: github-custom-card.svg
