@@ -219,6 +219,17 @@ async function fetchAllTimeContributionTotals(login, years) {
   return { totalCommits, totalReviews };
 }
 
+/** Linguist が Java と分類したバイトを JavaScript に合算（実態は JS のことがある） */
+function mergeJavaIntoJavaScript(languageMap) {
+  const java = languageMap.get("Java");
+  if (!java || !java.size) return;
+  const js = languageMap.get("JavaScript") || { size: 0, color: "#f1e05a" };
+  js.size = (js.size || 0) + java.size;
+  if (!js.color) js.color = "#f1e05a";
+  languageMap.set("JavaScript", js);
+  languageMap.delete("Java");
+}
+
 async function fetchLanguageAndRepoStats() {
   const languageMap = new Map();
   let totalStars = 0;
@@ -276,6 +287,8 @@ async function fetchLanguageAndRepoStats() {
     if (!repos.pageInfo.hasNextPage) break;
     after = repos.pageInfo.endCursor;
   }
+
+  mergeJavaIntoJavaScript(languageMap);
 
   const totalLangSize = [...languageMap.values()].reduce((acc, x) => acc + x.size, 0);
   const topLanguages = [...languageMap.entries()]
