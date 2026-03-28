@@ -303,9 +303,9 @@ function buildSvg(model) {
   const ringCirc = 2 * Math.PI * ringRadius;
   const ringProgress = clamp(model.score, 0, 100);
   const ringOffset = ringCirc * (1 - ringProgress / 100);
-  const rankCx = 776;
+  const rankCx = 798;
   const rankCy = 220;
-  const communityRankDividerX = 698;
+  const communityRankDividerX = 720;
 
   const barWidth = 820;
   let cursorX = 50;
