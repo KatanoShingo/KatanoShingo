@@ -30,19 +30,6 @@ async function toDataUri(url) {
   return `data:${mime};base64,${buffer.toString("base64")}`;
 }
 
-async function fetchPublicOrganizationsCount(login) {
-  const res = await fetch(`https://api.github.com/users/${encodeURIComponent(login)}/orgs`, {
-    headers: {
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
-      "User-Agent": "profile-card-generator",
-      Accept: "application/vnd.github+json",
-    },
-  });
-  if (!res.ok) return 0;
-  const data = await res.json();
-  return Array.isArray(data) ? data.length : 0;
-}
-
 function clamp(v, min, max) {
   return Math.max(min, Math.min(max, v));
 }
@@ -126,7 +113,6 @@ async function fetchUserSummary() {
         pullRequests(states: [OPEN, MERGED, CLOSED]) { totalCount }
         issues(states: [OPEN, CLOSED]) { totalCount }
         issueComments { totalCount }
-        organizations(first: 1) { totalCount }
         starredRepositories(first: 1) { totalCount }
         watching(first: 1) { totalCount }
         sponsorshipsAsMaintainer(first: 1) { totalCount }
@@ -317,6 +303,9 @@ function buildSvg(model) {
   const ringCirc = 2 * Math.PI * ringRadius;
   const ringProgress = clamp(model.score, 0, 100);
   const ringOffset = ringCirc * (1 - ringProgress / 100);
+  const rankCx = 776;
+  const rankCy = 220;
+  const communityRankDividerX = 698;
 
   const barWidth = 820;
   let cursorX = 50;
@@ -388,12 +377,11 @@ function buildSvg(model) {
   <text x="50" y="161" class="muted" font-size="12">（アクティビティ）</text>
   <text x="50" y="185" class="fg" font-size="14">• Commits（コミット）: ${formatNum(model.totalCommits)}</text>
   <text x="50" y="208" class="fg" font-size="14">• PR Opened（PR作成）: ${formatNum(model.totalPRs)}</text>
-  <text x="50" y="231" class="fg" font-size="14">• PR Reviews（PRレビュー）: ${formatNum(model.totalReviews)}</text>
-  <text x="50" y="254" class="fg" font-size="14">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
-  <text x="50" y="277" class="fg" font-size="14">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
-  <text x="50" y="300" class="fg" font-size="14">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
+  <text x="50" y="231" class="fg" font-size="14">• Issues（課題）: ${formatNum(model.totalIssues)}</text>
+  <text x="50" y="254" class="fg" font-size="14">• Comments（コメント）: ${formatNum(model.totalIssueComments)}</text>
+  <text x="50" y="277" class="fg" font-size="14">• Watching（ウォッチ中）: ${formatNum(model.watching)}</text>
 
-  <line x1="732" y1="126" x2="732" y2="330" class="line" stroke-width="1"/>
+  <line x1="${communityRankDividerX}" y1="126" x2="${communityRankDividerX}" y2="330" class="line" stroke-width="1"/>
   <text x="474" y="145" class="primary" font-size="23" font-weight="700">Community</text>
   <text x="474" y="161" class="muted" font-size="12">（コミュニティ）</text>
   <text x="474" y="185" class="fg" font-size="14">• Contributed Repos（参加）: ${formatNum(model.contributedRepos)}</text>
@@ -401,16 +389,15 @@ function buildSvg(model) {
   <text x="474" y="227" class="fg" font-size="14">• Stars Earned（獲得スター）: ${formatNum(model.totalStars)}</text>
   <text x="474" y="248" class="fg" font-size="14">• Forks Earned（獲得フォーク）: ${formatNum(model.totalForks)}</text>
   <text x="474" y="269" class="fg" font-size="14">• Starred（スター付け）: ${formatNum(model.starred)}</text>
-  <text x="474" y="290" class="fg" font-size="14">• Organizations（所属組織）: ${formatNum(model.organizations)}</text>
-  <text x="474" y="311" class="fg" font-size="14">• Releases（リリース数）: ${formatNum(model.totalReleases)}</text>
+  <text x="474" y="290" class="fg" font-size="14">• Releases（リリース数）: ${formatNum(model.totalReleases)}</text>
 
-  <text x="810" y="145" class="primary" font-size="17" text-anchor="middle" font-weight="700">Rank</text>
-  <text x="810" y="160" class="muted" font-size="11" text-anchor="middle">ランク</text>
-  <circle cx="810" cy="220" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
-  <circle cx="810" cy="220" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
-    transform="rotate(-90 810 220)" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
-  <text x="810" y="227" class="good" font-size="34" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
-  <text x="810" y="250" class="muted" font-size="12" text-anchor="middle">score ${model.score.toFixed(1)}</text>
+  <text x="${rankCx}" y="145" class="primary" font-size="17" text-anchor="middle" font-weight="700">Rank</text>
+  <text x="${rankCx}" y="160" class="muted" font-size="11" text-anchor="middle">ランク</text>
+  <circle cx="${rankCx}" cy="${rankCy}" r="${ringRadius}" fill="none" class="line" stroke-width="${ringStroke}"/>
+  <circle cx="${rankCx}" cy="${rankCy}" r="${ringRadius}" fill="none" stroke="url(#ring)" stroke-width="${ringStroke}" stroke-linecap="round"
+    transform="rotate(-90 ${rankCx} ${rankCy})" stroke-dasharray="${ringCirc.toFixed(2)}" stroke-dashoffset="${ringOffset.toFixed(2)}"/>
+  <text x="${rankCx}" y="227" class="good" font-size="34" text-anchor="middle" font-weight="700">${escapeXml(model.rank)}</text>
+  <text x="${rankCx}" y="250" class="muted" font-size="12" text-anchor="middle">score ${model.score.toFixed(1)}</text>
 
   <!-- Bottom row: languages + metadata -->
   <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
@@ -437,7 +424,6 @@ async function main() {
   const user = await fetchUserSummary();
   const repoStats = await fetchLanguageAndRepoStats();
   const avatarDataUri = await toDataUri(user.avatarUrl);
-  const publicOrganizationsCount = await fetchPublicOrganizationsCount(user.login);
   const allTime = await fetchAllTimeContributionTotals(user.login, user.contributionsCollection.contributionYears);
   const nowFocus = await fetchNowFocus(user.login, user.id);
   const consistency = computeConsistency(user.contributionsCollection.contributionCalendar);
@@ -451,7 +437,7 @@ async function main() {
     clamp(Math.log10((user.followers.totalCount || 0) + 1) * 8, 0, 10);
 
   const model = {
-    displayName: user.name || user.login,
+    displayName: "Shingo",
     avatarDataUri,
     githubYears: yearsSince(user.createdAt),
     githubDays: daysSince(user.createdAt),
@@ -470,7 +456,6 @@ async function main() {
     totalReleases: repoStats.totalReleases,
     languageCount: repoStats.languageCount,
     starred: user.starredRepositories.totalCount || 0,
-    organizations: Math.max(user.organizations.totalCount || 0, publicOrganizationsCount),
     sponsors: user.sponsorshipsAsMaintainer.totalCount || 0,
     watching: user.watching.totalCount || 0,
     score,
