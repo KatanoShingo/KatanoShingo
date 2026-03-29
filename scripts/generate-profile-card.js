@@ -352,7 +352,9 @@ function buildSvg(model) {
     .join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Shingo custom profile card">
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(
+    "Shingo（KatanoShingo）の GitHub 活動サマリー。コミット・コミュニティ・ランク・使用言語・直近の貢献傾向などを表示"
+  )}">
   <defs>
     <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#58a6ff"/>
