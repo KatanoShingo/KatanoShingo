@@ -6,7 +6,7 @@ Welcome to my GitHub profile!
 > 💡 **Note:** 実際の開発実績や主要なプロジェクトの多くは、業務要件などにより**プライベートリポジトリ**にて管理・運用しています。こちらで公開しているものは、個人開発やオープンソース活動、および参加したプロジェクトの一部となります。
 
 <div align="center">
-  <img src="./github-custom-card.svg" alt="Shingo's Custom GitHub Profile Card" />
+  <img src="./github-custom-card.svg" alt="Shingo（KatanoShingo）の GitHub 活動サマリー。コミット・コミュニティ・ランク・使用言語・直近の貢献傾向などを表示" />
 </div>
 
 ---
@@ -69,6 +69,7 @@ Welcome to my GitHub profile!
 - **CI**（GitHub Actions / GitLab CI など）
 - **外部 API の設計・作成**
 - **Udon**（VRChat）
+- **VRChat ワールド制作**（システム・最適化など）
 - **自動化**（ツール・ワークフローなど）
 
 ---

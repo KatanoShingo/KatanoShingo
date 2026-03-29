@@ -219,7 +219,7 @@ async function fetchAllTimeContributionTotals(login, years) {
   return { totalCommits, totalReviews };
 }
 
-/** Linguist が Java と分類したバイトを JavaScript に合算（実態は JS のことがある） */
+/** Java は書かず JavaScript のみ。Linguist が Java と分類したバイトは JavaScript に合算する */
 function mergeJavaIntoJavaScript(languageMap) {
   const java = languageMap.get("Java");
   if (!java || !java.size) return;
@@ -365,13 +365,6 @@ function buildSvg(model) {
       .muted { fill: #57606a; }
       .good { fill: #1a7f37; }
       .line { stroke: #d0d7de; }
-      @media (prefers-color-scheme: dark) {
-        .primary { fill: #58a6ff; }
-        .fg { fill: #c9d1d9; }
-        .muted { fill: #8b949e; }
-        .good { fill: #7ee787; }
-        .line { stroke: #30363d; }
-      }
     </style>
   </defs>
 
