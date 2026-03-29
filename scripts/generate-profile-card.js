@@ -353,7 +353,7 @@ function buildSvg(model) {
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeXml(
-    "Shingo（KatanoShingo）の GitHub 活動サマリー。コミット・コミュニティ・ランク・使用言語・直近の貢献傾向などを表示"
+    "Shingo の GitHub 活動サマリー。コミット・コミュニティ・ランク・使用言語・直近の貢献傾向などを表示"
   )}">
   <defs>
     <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
@@ -482,7 +482,9 @@ async function main() {
     consistency,
     nowFocusText:
       nowFocus.length > 0
-        ? nowFocus.map((x) => `${x.name} (${x.commits})`).join(" | ")
+        ? nowFocus
+            .map((x) => `${x.name === user.login ? "Shingo" : x.name} (${x.commits})`)
+            .join(" | ")
         : "No recent focused repositories",
   };
 

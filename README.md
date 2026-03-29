@@ -1,4 +1,4 @@
-# Hi there 👋 I'm Shingo Katano
+# Hi there 👋 I'm Shingo
 
 Welcome to my GitHub profile!  
 ソフトウェア開発者 / Unityエンジニアとして、ゲーム開発、グラフィックスプログラミング、そして効率化ツールの作成に情熱を注いでいます。また、ソフトウェアだけでなくハードウェア（3Dプリンタを活用したモデリング等）を絡めたモノづくりも得意としています。
@@ -6,7 +6,7 @@ Welcome to my GitHub profile!
 > 💡 **Note:** 実際の開発実績や主要なプロジェクトの多くは、業務要件などにより**プライベートリポジトリ**にて管理・運用しています。こちらで公開しているものは、個人開発やオープンソース活動、および参加したプロジェクトの一部となります。
 
 <div align="center">
-  <img src="./github-custom-card.svg" alt="Shingo（KatanoShingo）の GitHub 活動サマリー。コミット・コミュニティ・ランク・使用言語・直近の貢献傾向などを表示" />
+  <img src="./github-custom-card.svg" alt="Shingo の GitHub 活動サマリー。コミット・コミュニティ・ランク・使用言語・直近の貢献傾向などを表示" />
 </div>
 
 ---
