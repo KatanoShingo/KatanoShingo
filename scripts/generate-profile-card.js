@@ -170,6 +170,7 @@ async function fetchNowFocus(login, userId) {
         repositories(ownerAffiliations: OWNER, first: 50, orderBy: {field: PUSHED_AT, direction: DESC}, isFork: false) {
           nodes {
             name
+            isPrivate
             pushedAt
             defaultBranchRef {
               target {
@@ -189,6 +190,7 @@ async function fetchNowFocus(login, userId) {
   const rows = (data.user.repositories.nodes || [])
     .map((repo) => ({
       name: repo.name,
+      isPrivate: repo.isPrivate,
       pushedAt: repo.pushedAt,
       commits: repo.defaultBranchRef?.target?.history?.totalCount || 0,
     }))
@@ -558,7 +560,7 @@ async function main() {
     nowFocusText:
       nowFocus.length > 0
         ? nowFocus
-            .map((x) => `${x.name === user.login ? "Shingo" : x.name} (${x.commits})`)
+            .map((x) => `${x.isPrivate ? "Private Repository" : x.name === user.login ? "Shingo" : x.name} (${x.commits})`)
             .join(" | ")
         : "No recent focused repositories",
   };
