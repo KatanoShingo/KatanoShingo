@@ -3,6 +3,7 @@ const fs = require("fs/promises");
 const GITHUB_TOKEN = process.env.GH_PAT || process.env.GITHUB_TOKEN;
 const USERNAME = process.env.GH_USERNAME || "KatanoShingo";
 const OUTPUT = process.env.OUTPUT_FILE || "github-custom-card.svg";
+const REPOSITORY = process.env.GITHUB_REPOSITORY || `${USERNAME}/${USERNAME}`;
 
 if (!GITHUB_TOKEN) throw new Error("Missing token. Set GH_PAT or GITHUB_TOKEN.");
 
@@ -62,6 +63,31 @@ function escapeXml(value) {
 function truncateText(value, max = 90) {
   const text = String(value || "");
   return text.length <= max ? text : `${text.slice(0, max - 1)}…`;
+}
+
+function parseRepositorySlug(slug) {
+  const [owner, name] = String(slug || "").split("/");
+  if (!owner || !name) throw new Error(`Invalid repository slug: ${slug}`);
+  return { owner, name };
+}
+
+function calendarDateTime(date, time) {
+  return `${date}T${time}Z`;
+}
+
+function calendarDays(contributionCalendar) {
+  return (contributionCalendar?.weeks || [])
+    .flatMap((w) => w.contributionDays || [])
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+function isBotIdentity(value) {
+  const text = String(value || "").toLowerCase();
+  return text.includes("[bot]") || text.endsWith("-bot") || text.endsWith("_bot");
+}
+
+function isBotGitActor(actor) {
+  return [actor?.user?.login, actor?.name, actor?.email].some(isBotIdentity);
 }
 
 function yearsSince(dateIso) {
@@ -172,10 +198,57 @@ async function fetchNowFocus(login, userId) {
   return rows;
 }
 
-function computeConsistency(contributionCalendar) {
-  const days = (contributionCalendar?.weeks || [])
-    .flatMap((w) => w.contributionDays || [])
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+async function fetchBotCommitDeductions(contributionCalendar) {
+  const days = calendarDays(contributionCalendar);
+  const firstDay = days[0]?.date;
+  if (!firstDay) return new Map();
+
+  const { owner, name } = parseRepositorySlug(REPOSITORY);
+  const query = `
+    query($owner: String!, $name: String!, $since: GitTimestamp!, $after: String) {
+      repository(owner: $owner, name: $name) {
+        defaultBranchRef {
+          target {
+            ... on Commit {
+              history(first: 100, since: $since, after: $after) {
+                pageInfo { hasNextPage endCursor }
+                nodes {
+                  committedDate
+                  author { name email user { login } }
+                  committer { name email user { login } }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const deductions = new Map();
+  let after = null;
+  const since = calendarDateTime(firstDay, "00:00:00");
+
+  while (true) {
+    const data = await graphql(query, { owner, name, since, after });
+    const history = data.repository?.defaultBranchRef?.target?.history;
+    for (const commit of history?.nodes || []) {
+      if (!isBotGitActor(commit.author) && !isBotGitActor(commit.committer)) continue;
+      const date = commit.committedDate.slice(0, 10);
+      deductions.set(date, (deductions.get(date) || 0) + 1);
+    }
+    if (!history?.pageInfo?.hasNextPage) break;
+    after = history.pageInfo.endCursor;
+  }
+
+  return deductions;
+}
+
+function computeConsistency(contributionCalendar, botCommitDeductions = new Map()) {
+  const days = calendarDays(contributionCalendar).map((day) => ({
+    ...day,
+    contributionCount: Math.max(0, (day.contributionCount || 0) - (botCommitDeductions.get(day.date) || 0)),
+  }));
   let current = 0;
   for (let i = days.length - 1; i >= 0; i -= 1) {
     if ((days[i].contributionCount || 0) > 0) current += 1;
@@ -192,7 +265,8 @@ function computeConsistency(contributionCalendar) {
     }
   }
   const activeDays = days.filter((d) => (d.contributionCount || 0) > 0).length;
-  return { current, best, activeDays, total: contributionCalendar?.totalContributions || 0 };
+  const total = days.reduce((sum, d) => sum + (d.contributionCount || 0), 0);
+  return { current, best, activeDays, total };
 }
 
 async function fetchAllTimeContributionTotals(login, years) {
@@ -444,7 +518,8 @@ async function main() {
   const avatarDataUri = await toDataUri(user.avatarUrl);
   const allTime = await fetchAllTimeContributionTotals(user.login, user.contributionsCollection.contributionYears);
   const nowFocus = await fetchNowFocus(user.login, user.id);
-  const consistency = computeConsistency(user.contributionsCollection.contributionCalendar);
+  const botCommitDeductions = await fetchBotCommitDeductions(user.contributionsCollection.contributionCalendar);
+  const consistency = computeConsistency(user.contributionsCollection.contributionCalendar, botCommitDeductions);
   const totalCommitsForDisplay = Math.max(allTime.totalCommits || 0, repoStats.totalRepoCommits || 0);
 
   const score =
