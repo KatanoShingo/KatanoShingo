@@ -424,8 +424,7 @@ function buildSvg(model) {
       const y = 421 + row * 24;
       return `<circle cx="${x}" cy="${y}" r="4.5" fill="${escapeXml(lang.color || "#8b949e")}"/>
 <text x="${x + 14}" y="${y + 5}" class="fg" font-size="15">${escapeXml(lang.name)}</text>
-<text x="${x + 170}" y="${y + 5}" class="muted" font-size="14">${formatBytes(lang.size)}</text>
-<text x="${x + 282}" y="${y + 5}" class="muted" font-size="14">${lang.percent.toFixed(2)}%</text>`;
+<text x="${x + 220}" y="${y + 5}" class="muted" font-size="14">${lang.percent.toFixed(2)}%</text>`;
     })
     .join("");
 
@@ -497,7 +496,7 @@ function buildSvg(model) {
 
   <!-- Bottom row: languages + metadata -->
   <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
-  <text x="302" y="374" class="muted" font-size="12">Public repositories only（公開リポジトリのみ）</text>
+  <text x="366" y="374" class="muted" font-size="12">Public repositories only（公開リポジトリのみ）</text>
   <rect x="50" y="${barY}" width="${barWidth}" height="11" fill="none" class="line" rx="6"/>
   ${segments}
   ${languageRows}
