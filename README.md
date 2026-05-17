@@ -156,6 +156,20 @@ BOOTHにて公開・販売している、Unity開発者向けの便利ツール�
 
 ---
 
+## 🤝 Open Source Contributions（コントリビュート）
+
+他者が主導するオープンソースプロジェクトに、コードや知見の形で貢献した事例です。
+
+- 🧩 **[agent-skills-vrc-udon](https://github.com/niaka3dayo/agent-skills-vrc-udon)**
+  - **概要**: VRChat UdonSharp 開発向けの Agent Skills（スキル定義・ルール・検証フック等）へのコントリビュート
+  - `VRChat` `UdonSharp` `Agent Skills`
+
+- 🤖 **[PremaindAI_TechVerification](https://github.com/neon-izm/PremaindAI_TechVerification)**
+  - **概要**: プリメイドAI のダンスモーション（`*.pma`）解析・Unity 検証プロジェクトへのコントリビュート（可動域修正、軽微なバグ修正など）
+  - `Unity` `C#`
+
+---
+
 ## 🎁 おまけ：Gitの「ドットファイル」完全チートシート
 
 Git周りの紛らわしいファイルやフォルダを整理しました。開発の小ネタにお役立てください！
