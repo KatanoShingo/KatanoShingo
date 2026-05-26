@@ -87,8 +87,8 @@ Welcome to my GitHub profile!
 
 個人開発し、ブラウザ上で遊べるよう公開しているゲーム作品です。
 
-- 🕹️ **[ジェネリック塊魂](https://unityroom.com/games/generic_katamari)**
-  - **概要**: オブジェクトを巻き込んで大きくしていく、塊魂ライクな3Dアクションゲーム
+- 🕹️ **[巻き込みソウル](https://unityroom.com/games/generic_katamari)**
+  - **概要**: オブジェクトを巻き込んで大きくしていく、3Dアクションゲーム
   - `Unity` `C#` `WebGL`
 
 ### 🌍 VRChat Worlds（システム開発 / ワールド制作）
