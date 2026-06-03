@@ -27,7 +27,7 @@
   <clipPath id="avatarClip"><circle cx="48" cy="48" r="23"/></clipPath>
   <image href="data:image/jpeg;base64,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" x="25" y="25" width="46" height="46" clip-path="url(#avatarClip)"/>
   <text x="82" y="54" class="primary" font-size="28" font-weight="700">Shingo</text>
-  <text x="82" y="78" class="muted" font-size="14">Joined 7y ago（GitHub歴 7年 / 2,888日）</text>
+  <text x="82" y="78" class="muted" font-size="14">Joined 7y ago（GitHub歴 7年 / 2,889日）</text>
   <text x="450" y="78" class="muted" font-size="14">Followers（フォロワー）8 / Following（フォロー中）8</text>
 
   <!-- Top row: left Activity / right Community -->
@@ -36,7 +36,7 @@
 
   <text x="50" y="145" class="primary" font-size="23" font-weight="700">Activity</text>
   <text x="50" y="161" class="muted" font-size="12">（アクティビティ）</text>
-  <text x="50" y="185" class="fg" font-size="14">• Commits（コミット）: 1,496</text>
+  <text x="50" y="185" class="fg" font-size="14">• Commits（コミット）: 1,502</text>
   <text x="50" y="208" class="fg" font-size="14">• PR Opened（PR作成）: 49</text>
   <text x="50" y="231" class="fg" font-size="14">• Issues（課題）: 20</text>
   <text x="50" y="254" class="fg" font-size="14">• Comments（コメント）: 14</text>
@@ -49,7 +49,7 @@
   <text x="474" y="206" class="fg" font-size="14">• Owned Repos（所有）: 58</text>
   <text x="474" y="227" class="fg" font-size="14">• Stars Earned（獲得スター）: 16</text>
   <text x="474" y="248" class="fg" font-size="14">• Forks Earned（獲得フォーク）: 1</text>
-  <text x="474" y="269" class="fg" font-size="14">• Starred（スター付け）: 59</text>
+  <text x="474" y="269" class="fg" font-size="14">• Starred（スター付け）: 60</text>
   <text x="474" y="290" class="fg" font-size="14">• Releases（リリース数）: 10</text>
 
   <text x="806" y="145" class="primary" font-size="17" text-anchor="middle" font-weight="700">Rank</text>
@@ -81,8 +81,8 @@
 <text x="64" y="498" class="fg" font-size="15">HTML</text>
 <text x="270" y="498" class="muted" font-size="14">0.83%</text>
 
-  <text x="50" y="538" class="muted" font-size="12">Now Focus（直近90日）: Shingo (158) | Private Repository (75) | Private Repository (28)</text>
-  <text x="50" y="558" class="muted" font-size="12">Consistency（継続性）: current（現在連続）0d / best（最長連続）12d / active days（活動日数）99 / total（直近1年の貢献数）775</text>
-  <text x="50" y="576" class="muted" font-size="12">Disk Usage（使用量）: 19.0 GB / Languages（言語数）: 7 / Updated（更新）: 2026-06-02</text>
+  <text x="50" y="538" class="muted" font-size="12">Now Focus（直近90日）: Shingo (145) | Private Repository (78) | Private Repository (28)</text>
+  <text x="50" y="558" class="muted" font-size="12">Consistency（継続性）: current（現在連続）2d / best（最長連続）12d / active days（活動日数）101 / total（直近1年の貢献数）779</text>
+  <text x="50" y="576" class="muted" font-size="12">Disk Usage（使用量）: 19.0 GB / Languages（言語数）: 7 / Updated（更新）: 2026-06-03</text>
   <text x="870" y="576" class="muted" font-size="12" text-anchor="end">generated by GitHub Actions</text>
 </svg>
