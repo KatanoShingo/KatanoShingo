@@ -91,6 +91,14 @@ Welcome to my GitHub profile!
   - **概要**: オブジェクトを巻き込んで大きくしていく、3Dアクションゲーム
   - `Unity` `C#` `WebGL`
 
+### 🌐 Web Sites（Webサイト / Webアプリ）
+
+個人開発し、ブラウザから利用できるWebサービスです。
+
+- 📇 **[VRC名鑑](https://vrc-meikan.makuake.org)**
+  - **概要**: VRChatユーザー向けのアバター作品＆プレイスタイル公開名鑑。作品のスワイプ閲覧・Clip保存・公開プロフィールなどを提供するWebアプリ
+  - `React Router` `TypeScript` `Cloudflare Workers` `D1`
+
 ### 🌍 VRChat Worlds（システム開発 / ワールド制作）
 
 私がバックエンドのシステム開発（Udon / C#）や、空間デザイン・モデリングなどを担当したVRChatワールドです。
