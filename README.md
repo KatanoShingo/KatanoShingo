@@ -15,13 +15,22 @@ Welcome to my GitHub profile!
 
 ---
 
+## 👤 できること（ひとことで）
+
+- **ゲーム開発** — Unity を使ったゲーム制作・公開
+- **VRChat** — ワールドの仕組みづくり・空間制作・外部サービス連携
+- **Webサービス** — ブラウザで使えるサイト・アプリの企画〜実装
+- **効率化ツール** — 手作業を減らす自動化・開発支援ツールの作成
+
+---
+
 ## 🔭 今やっていること（Now）
 
 新規 **VRChat ワールド**の作成に取り組んでいます。
 
 ---
 
-## 🏆 Experience & Awards（経歴・受賞歴）
+## 🏆 経歴・受賞歴
 
 - **2019.11** 🥈 **第2回 Looking Glass ハッカソン - 準優勝**
 - **2019.04** 🏢 **アプリゲーム会社 入社** — 現職（2026年時点で約7年目）
@@ -29,15 +38,15 @@ Welcome to my GitHub profile!
 
 ---
 
-## 🛠 Skills & Technologies（スキル・使用技術）
+## 🛠 スキル・使用技術
 
-### Game Engine & 3D（ゲームエンジン・3Dツール）
+### ゲームエンジン・3Dツール
 
 ![Unity](https://img.shields.io/badge/-Unity-000000?style=for-the-badge&logo=unity&logoColor=white)
 ![Blender](https://img.shields.io/badge/Blender-F5792A?style=for-the-badge&logo=blender&logoColor=white)
 ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white)
 
-### Languages & Scripting（言語・スクリプト）
+### 言語・スクリプト
 
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
 ![GLSL](https://img.shields.io/badge/GLSL-5586A4?style=for-the-badge&logo=opengl&logoColor=white)
@@ -48,13 +57,13 @@ Welcome to my GitHub profile!
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![Batch](https://img.shields.io/badge/Batch-4D4D4D?style=for-the-badge&logo=windows-terminal&logoColor=white)
 
-### Database & Infrastructure（データベース・インフラ）
+### データベース・インフラ
 
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)
 ![Google Apps Script](https://img.shields.io/badge/Google_Apps_Script-4285F4?style=for-the-badge&logo=googleappsscript&logoColor=white)
 
-### Editors & Collaboration（開発ツール・バージョン管理）
+### 開発ツール・バージョン管理
 
 ![Cursor](https://img.shields.io/badge/Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white)
 ![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
@@ -66,124 +75,115 @@ Welcome to my GitHub profile!
 
 ---
 
-## 🎯 得意領域（Focus）
+## 🎯 得意領域
 
-実務・個人開発の両方で扱っている、特に強みとしている領域です。
+特に強みとしている領域です。
 
-- **Unity エディタ拡張**
-- **CI**（GitHub Actions / GitLab CI など）
-- **外部 API の設計・作成**
-- **Udon**（VRChat）
-- **VRChat ワールド制作**（システム・最適化など）
-- **自動化**（ツール・ワークフローなど）
+- **Unity の作業を効率化するツール作り**
+- **繰り返し作業の自動化**（CI・ワークフローなど）
+- **外部サービスとのつなぎ込み**（API 設計・実装）
+- **VRChat ワールドの仕組みづくり**（マッチング、ポイント、ログインなど）
+- **VRChat ワールド制作**（システムの軽量化・最適化を含む）
 
 ---
 
-## 🚀 Projects / Portfolios（開発実績・ポートフォリオ）
+## 🚀 ポートフォリオ（開発実績）
 
-公開可能な範囲で、現在メインで取り組んでいる・開発したプロジェクトの一部をご紹介します。
+公開できる範囲で、作ったもの・関わったものを紹介します。  
+リンクから実際に触れるものもあります。
 
-### 🎮 Web Games（ブラウザゲーム）
+### 🎮 遊べる作品
 
-個人開発し、ブラウザ上で遊べるよう公開しているゲーム作品です。
+ブラウザで遊べるゲームです。
 
 - 🕹️ **[巻き込みソウル](https://unityroom.com/games/generic_katamari)**
-  - **概要**: オブジェクトを巻き込んで大きくしていく、3Dアクションゲーム
-  - `Unity` `C#` `WebGL`
+  - **なにができる**: オブジェクトを巻き込んで大きくしていく、3Dアクションゲーム
+  - **担当**: 企画〜開発〜公開まで一通り
 
-### 🌐 Web Sites（Webサイト / Webアプリ）
+### 🌐 使えるWebサービス
 
-個人開発し、ブラウザから利用できるWebサービスです。
+ブラウザから使えるサイト・アプリです。
 
-- 🛒 **[BOOTH検索広場](https://review.makuake.org/web/)**
-  - **概要**: BOOTH商品の検索・レビュー投稿・週間ランキングなどを提供するレビューサイト。VRChatワールドとレビューデータを共有
-  - `TypeScript` `Cloudflare Workers` `D1`
+- 🛒 **BOOTH検索広場** — [サイトを見る](https://review.makuake.org/web/) ／ [VRChatワールドを見る](https://vrchat.com/home/world/wrld_faeb99cb-3f2b-4a01-9819-c95500833709/info)
+  - **なにができる**: BOOTH商品の検索・レビュー投稿・週間ランキング。WebとVRChatでレビューデータを共有
+  - **担当**: Web側の開発、およびワールド内のレビュー投稿・閲覧の仕組みづくり
 
 - 📇 **[VRC名鑑](https://vrc-meikan.makuake.org)**
-  - **概要**: VRChatユーザー向けのアバター作品＆プレイスタイル公開名鑑。作品のスワイプ閲覧・Clip保存・公開プロフィールなどを提供するWebアプリ
-  - `React Router` `TypeScript` `Cloudflare Workers` `D1`
+  - **なにができる**: VRChatユーザー向けのアバター作品＆プレイスタイル公開名鑑。スワイプ閲覧・保存・公開プロフィールなど
+  - **担当**: 企画〜開発〜公開まで一通り
 
-### 🌍 VRChat Worlds（システム開発 / ワールド制作）
+### 🌍 VRChat ワールド
 
-私がバックエンドのシステム開発（Udon / C#）や、空間デザイン・モデリングなどを担当したVRChatワールドです。
-_(※一部の非公開プロジェクトやワールドでは、VRChatから外部Webサーバー・APIへの連携システムの構築なども担当しています)_
+仕組みづくり（マッチング・ポイント・ログインなど）や、空間デザインを担当したワールドです。  
+※一部では、VRChatと外部Web・サーバーをつなぐ連携も担当しています。
 
 - 🌌 **[ツーショットマッチング制 恋のMAKUAKE](https://vrchat.com/home/world/wrld_17905f5b-a310-48cc-b7ca-c03b0a1e5067/info)**
-  - **概要**: 自動マッチングシステム、およびワールドの部屋の軽量化（最適化）システム
-  - `Unity` `UdonSharp` `C#`
+  - **なにができる**: 自動で相手とマッチングする仕組み。部屋を軽く保つ最適化も含む
+  - **担当**: マッチングシステム、および軽量化（最適化）
 
 - 🎡 **[居心地ポイント制 MAKUAKE JP](https://vrchat.com/home/world/wrld_355a0278-aaff-4ee0-ba20-e6912386f898/info)**
-  - **概要**: プレイヤー間のポイント送信システム、およびポイント自動保存・加算システム
-  - `Unity` `UdonSharp` `C#`
+  - **なにができる**: プレイヤー同士でポイントを送り合い、自動で保存・加算される仕組み
+  - **担当**: ポイント送信・保存・加算システム
 
 - 🔑 **[ワールドログインシステム](https://vrchat.com/home/world/wrld_45020b1b-5820-4642-8f42-b726e4a5fde6/info)**
-  - **概要**: 外部サーバーを経由したワールドログインシステムの構築・実装
-  - `Unity` `UdonSharp` `C#` `API`
-
-- 🛒 **[BOOTH検索広場](https://vrchat.com/home/world/wrld_faeb99cb-3f2b-4a01-9819-c95500833709/info)**
-  - **概要**: BOOTH商品のレビュー投稿・閲覧システム、および外部Webサービスとのレビューデータ連携
-  - `Unity` `UdonSharp` `C#` `API`
+  - **なにができる**: 外部サーバーと連携した、ワールドへのログイン仕組み
+  - **担当**: ログインシステム全体の構築・実装
 
 - 🌙 **[Melty Night](https://x.com/VRC_MeltyNight)**
-  - **概要**: アセットの配置や、Blenderを用いた再編集・拡張によるワールド空間の制作
-  - `Unity` `Blender`
+  - **なにができる**: 夜の雰囲気のワールド空間
+  - **担当**: アセット配置、Blenderでの再編集・拡張による空間制作
 
 - 📛 **[テキストファンタジア - 日本語話者向け集会場 -](https://vrchat.com/home/world/wrld_e32f8deb-7ffc-4e28-820d-8b249d8d326c/info)**
-  - **概要**: 超軽量ワールド内ネームプレートガチャ
-  - `Unity` `UdonSharp` `C#`
+  - **なにができる**: 超軽量な、ワールド内ネームプレートガチャ
+  - **担当**: ガチャの仕組みづくり
 
-### 💻 GitHub Projects / Tools（オープンソースツール / ボット開発）
+### 🛠 効率化・開発支援
 
-個人開発や、業務効率化のために作成したツール群、およびAPIを活用したボット開発の実績です。
+手作業を減らすツールや、開発者向けの販売アイテムです。
 
 - 🎙️ **[dji-mic-secretary](https://github.com/KatanoShingo/dji-mic-secretary)**
-  - **概要**: DJI Mic 2を利用した自動文字起こし、自動保存、自動抽出を行う業務効率化ツール
-  - `Python` `API`
+  - **なにができる**: DJI Mic 2の音声を、自動で文字起こし・保存・抽出する業務効率化ツール
+  - **担当**: 企画〜開発
 
 - 🔄 **[AutoBackup](https://github.com/KatanoShingo/AutoBackup)**
-  - **概要**: 作業中のデータ消失を防ぐ、UnityのSceneデータを自動バックアップする拡張ツール
-  - `Unity` `C#`
+  - **なにができる**: Unityの作業中データを自動バックアップし、消失を防ぐツール
+  - **担当**: 企画〜開発
 
 - ⌨️ **[KeyhacKeymap](https://github.com/KatanoShingo/KeyhacKeymap)**
-  - **概要**: キーボード操作を最適化し、日々の作業を効率化するためのKeyhac用カスタムキーマップ設定
-  - `Python`
+  - **なにができる**: キーボード操作を短く・速くするためのカスタム設定
+  - **担当**: 企画〜開発
 
 - 🤖 **Bot 開発**
-  - **Twitter(X) / Discord / Slack**: 各種APIを活用し、自動投稿やサーバー・ワークスペース内の便利機能を提供するボットシステムの開発実績
-  - **メルカリ新着通知bot**: 新着出品の監視・通知 
-  - `Python` `TypeScript` `GAS` `Cloudflare Workers`
+  - **なにができる**: X（Twitter）／Discord／Slack向けボット、メルカリ新着の監視・通知など
+  - **担当**: 各種ボットの設計・実装
 
-### 🛍️ BOOTH Assets（公開中の販売アイテム）
+- 📦 **[FileSplitMergeTool](https://feitas.booth.pm/items/6990234)**（BOOTH販売）
+  - **なにができる**: 大きなUnityファイルを分割・結合し、容量制限やクラッシュ対策に使うツール
+  - **担当**: 企画〜開発〜販売
 
-BOOTHにて公開・販売している、Unity開発者向けの便利ツール群です。
+- 📦 **[OBJExporter](https://feitas.booth.pm/items/7005523)**（BOOTH販売）
+  - **なにができる**: 3Dオブジェクトやアニメーションを、ワンクリックで書き出す加工支援ツール
+  - **担当**: 企画〜開発〜販売
 
-- 📦 **[FileSplitMergeTool](https://feitas.booth.pm/items/6990234)**
-  - **概要**: 大容量のUnityファイルを分割・結合し、容量制限の回避やクラッシュ対策に役立つツール
-  - `Unity` `C#`
+- 📦 **[UpdateChecker](https://feitas.booth.pm/items/7008337)**（BOOTH販売）
+  - **なにができる**: アセット商品ページの更新を、Unity上でまとめて確認できるツール
+  - **担当**: 企画〜開発〜販売
 
-- 📦 **[OBJExporter](https://feitas.booth.pm/items/7005523)**
-  - **概要**: 複数の3Dオブジェクトや再生中のアニメーションを、ワンクリックで出力できる3Dプリント・加工支援ツール
-  - `Unity` `C#` `3D Print`
-
-- 📦 **[UpdateChecker](https://feitas.booth.pm/items/7008337)**
-  - **概要**: アセット商品ページの更新をUnityエディタ上で一括管理・検知できる開発者向けチェッカー
-  - `Unity` `C#`
-
-> _(※ その他、公開可能なリポジトリ一覧は [Repositories](https://github.com/KatanoShingo?tab=repositories) タブからご覧ください)_
+> その他の公開リポジトリは [Repositories](https://github.com/KatanoShingo?tab=repositories) からご覧ください。
 
 ---
 
-## 🤝 Open Source Contributions（コントリビュート）
+## 🤝 オープンソースへの貢献
 
-他者が主導するオープンソースプロジェクトに、コードや知見の形で貢献した事例です。
+他の人が主導するプロジェクトに、コードや改善で参加した事例です。
 
 - 🧩 **[agent-skills-vrc-udon](https://github.com/niaka3dayo/agent-skills-vrc-udon)**
-  - **概要**: VRChat UdonSharp 開発向けの Agent Skills（スキル定義・ルール・検証フック等）へのコントリビュート
-  - `VRChat` `UdonSharp` `Agent Skills`
+  - **なにができる**: VRChat向け開発をAIエージェントが支援するためのスキル定義・ルールなど
+  - **担当**: コントリビュート（定義・ルール・検証まわり）
 
 - 🤖 **[PremaindAI_TechVerification](https://github.com/neon-izm/PremaindAI_TechVerification)**
-  - **概要**: プリメイドAI のダンスモーション（`*.pma`）解析・Unity 検証プロジェクトへのコントリビュート（可動域修正、軽微なバグ修正など）
-  - `Unity` `C#`
+  - **なにができる**: プリメイドAIのダンスモーションを解析・Unityで検証するプロジェクト
+  - **担当**: コントリビュート（可動域の修正、軽微なバグ修正など）
 
 ---
 
@@ -199,7 +199,7 @@ Git周りの紛らわしいファイルやフォルダを整理しました。�
 
 ---
 
-## 📫 Contact（お問い合わせ）
+## 📫 お問い合わせ
 
 転職については<strong>正社員（フルタイム）</strong>での就業を希望しており、<strong>副業</strong>についてもご相談可能です。勤務形態のご希望としては、出社を伴う場合は<strong>関東圏</strong>、リモート勤務の場合は<strong>地域の限定はありません</strong>。お仕事のご依頼や内容のご相談は、下記メールアドレスよりお願いいたします。
 
