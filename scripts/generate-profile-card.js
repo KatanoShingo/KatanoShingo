@@ -295,6 +295,9 @@ async function fetchAllTimeContributionTotals(login, years) {
   return { totalCommits, totalReviews };
 }
 
+/** Unity アセット由来でランキングを歪める言語は集計から除外する */
+const EXCLUDED_LANGUAGES = new Set(["ShaderLab"]);
+
 /** Java は書かず JavaScript のみ。Linguist が Java と分類したバイトは JavaScript に合算する */
 function mergeJavaIntoJavaScript(languageMap) {
   const java = languageMap.get("Java");
@@ -333,7 +336,7 @@ async function fetchLanguageAndRepoStats() {
                 }
               }
             }
-            languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+            languages(first: 20, orderBy: {field: SIZE, direction: DESC}) {
               edges {
                 size
                 node { name color }
@@ -354,12 +357,14 @@ async function fetchLanguageAndRepoStats() {
       totalDiskUsageKB += repo.diskUsage || 0;
       totalReleases += repo.releases?.totalCount || 0;
       totalRepoCommits += repo.defaultBranchRef?.target?.history?.totalCount || 0;
-      if (repo.isPrivate) continue;
       for (const edge of repo.languages.edges || []) {
-        const prev = languageMap.get(edge.node.name) || { size: 0, color: edge.node.color || "#8b949e" };
+        const name = edge.node.name;
+        // TypeScript は JavaScript に合算しない。アセット系（ShaderLab）は除外。
+        if (!name || EXCLUDED_LANGUAGES.has(name)) continue;
+        const prev = languageMap.get(name) || { size: 0, color: edge.node.color || "#8b949e" };
         prev.size += edge.size || 0;
         if (!prev.color && edge.node.color) prev.color = edge.node.color;
-        languageMap.set(edge.node.name, prev);
+        languageMap.set(name, prev);
       }
     }
     if (!repos.pageInfo.hasNextPage) break;
@@ -496,7 +501,7 @@ function buildSvg(model) {
 
   <!-- Bottom row: languages + metadata -->
   <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
-  <text x="366" y="374" class="muted" font-size="12">Public repositories only（公開リポジトリのみ）</text>
+  <text x="366" y="374" class="muted" font-size="12">ShaderLab excluded（アセット系は除外）</text>
   <rect x="50" y="${barY}" width="${barWidth}" height="11" fill="none" class="line" rx="6"/>
   ${segments}
   ${languageRows}
