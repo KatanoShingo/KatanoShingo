@@ -120,6 +120,10 @@ _(※一部の非公開プロジェクトやワールドでは、VRChatから外
   - **概要**: 外部サーバーを経由したワールドログインシステムの構築・実装
   - `Unity` `UdonSharp` `C#` `API`
 
+- 🛒 **[BOOTH検索広場](https://vrchat.com/home/world/wrld_faeb99cb-3f2b-4a01-9819-c95500833709/info)**
+  - **概要**: BOOTH商品のレビュー投稿・閲覧システム、および外部Webサービスとのレビューデータ連携
+  - `Unity` `UdonSharp` `C#` `API`
+
 - 🌙 **[Melty Night](https://x.com/VRC_MeltyNight)**
   - **概要**: アセットの配置や、Blenderを用いた再編集・拡張によるワールド空間の制作
   - `Unity` `Blender`
