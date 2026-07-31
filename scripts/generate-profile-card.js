@@ -298,32 +298,132 @@ async function fetchAllTimeContributionTotals(login, years) {
 /** Unity アセット由来でランキングを歪める言語は集計から除外する */
 const EXCLUDED_LANGUAGES = new Set(["ShaderLab"]);
 
-/** Java は書かず JavaScript のみ。Linguist が Java と分類したバイトは JavaScript に合算する */
-function mergeJavaIntoJavaScript(languageMap) {
-  const java = languageMap.get("Java");
-  if (!java || !java.size) return;
-  const js = languageMap.get("JavaScript") || { size: 0, color: "#f1e05a" };
-  js.size = (js.size || 0) + java.size;
-  if (!js.color) js.color = "#f1e05a";
-  languageMap.set("JavaScript", js);
-  languageMap.delete("Java");
+const MAX_COMMITS_PER_REPO = 150;
+const MAX_TOTAL_COMMITS = 800;
+const REPO_LANGUAGE_CONCURRENCY = 3;
+
+const SKIP_PATH_PATTERNS = [
+  /(^|\/)node_modules\//i,
+  /(^|\/)Library\//i,
+  /(^|\/)Packages\//i,
+  /(^|\/)vendor\//i,
+  /(^|\/)dist\//i,
+  /(^|\/)build\//i,
+  /(^|\/)obj\//i,
+  /(^|\/)bin\//i,
+  /\.min\.js$/i,
+  /\.generated\./i,
+];
+
+const EXTENSION_LANGUAGES = {
+  bat: { name: "Batchfile", color: "#C1F12E" },
+  cmd: { name: "Batchfile", color: "#C1F12E" },
+  c: { name: "C", color: "#555555" },
+  cc: { name: "C++", color: "#f34b7d" },
+  cpp: { name: "C++", color: "#f34b7d" },
+  cxx: { name: "C++", color: "#f34b7d" },
+  cs: { name: "C#", color: "#178600" },
+  css: { name: "CSS", color: "#563d7c" },
+  go: { name: "Go", color: "#00ADD8" },
+  h: { name: "C++", color: "#f34b7d" },
+  hpp: { name: "C++", color: "#f34b7d" },
+  html: { name: "HTML", color: "#e34c26" },
+  htm: { name: "HTML", color: "#e34c26" },
+  java: { name: "Java", color: "#b07219" },
+  js: { name: "JavaScript", color: "#f1e05a" },
+  jsx: { name: "JavaScript", color: "#f1e05a" },
+  mjs: { name: "JavaScript", color: "#f1e05a" },
+  cjs: { name: "JavaScript", color: "#f1e05a" },
+  json: { name: "JSON", color: "#292929" },
+  kt: { name: "Kotlin", color: "#A97BFF" },
+  md: { name: "Markdown", color: "#083fa1" },
+  php: { name: "PHP", color: "#4F5D95" },
+  ps1: { name: "PowerShell", color: "#012456" },
+  py: { name: "Python", color: "#3572A5" },
+  rb: { name: "Ruby", color: "#701516" },
+  rs: { name: "Rust", color: "#dea584" },
+  scss: { name: "SCSS", color: "#c6538c" },
+  sh: { name: "Shell", color: "#89e051" },
+  sql: { name: "SQL", color: "#e38c00" },
+  swift: { name: "Swift", color: "#F05138" },
+  ts: { name: "TypeScript", color: "#3178c6" },
+  tsx: { name: "TypeScript", color: "#3178c6" },
+  vue: { name: "Vue", color: "#41b883" },
+  xml: { name: "XML", color: "#0060ac" },
+  yaml: { name: "YAML", color: "#cb171e" },
+  yml: { name: "YAML", color: "#cb171e" },
+  glsl: { name: "GLSL", color: "#5686a5" },
+  hlsl: { name: "HLSL", color: "#aace60" },
+  gs: { name: "JavaScript", color: "#f1e05a" },
+};
+
+function shouldSkipPath(path) {
+  return SKIP_PATH_PATTERNS.some((pattern) => pattern.test(path));
 }
 
-async function fetchLanguageAndRepoStats() {
-  const languageMap = new Map();
-  let totalStars = 0;
-  let totalForks = 0;
-  let totalDiskUsageKB = 0;
-  let totalReleases = 0;
-  let totalRepoCommits = 0;
-  let after = null;
+function languageFromPath(path) {
+  if (!path || shouldSkipPath(path)) return null;
+  const base = path.split("/").pop() || "";
+  const dot = base.lastIndexOf(".");
+  if (dot <= 0) return null;
+  return EXTENSION_LANGUAGES[base.slice(dot + 1).toLowerCase()] || null;
+}
 
+function addLanguageLines(languageMap, language, lines) {
+  if (!language || !lines || lines <= 0 || EXCLUDED_LANGUAGES.has(language.name)) return;
+  const prev = languageMap.get(language.name) || { size: 0, color: language.color || "#8b949e" };
+  prev.size += lines;
+  if (!prev.color && language.color) prev.color = language.color;
+  languageMap.set(language.name, prev);
+}
+
+async function mapPool(items, concurrency, fn) {
+  const results = new Array(items.length);
+  let index = 0;
+  async function worker() {
+    while (index < items.length) {
+      const current = index;
+      index += 1;
+      results[current] = await fn(items[current], current);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, () => worker()));
+  return results;
+}
+
+async function restGet(path, params = {}) {
+  const url = new URL(`https://api.github.com${path}`);
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) url.searchParams.set(key, String(value));
+  }
+  const res = await fetch(url.toString(), {
+    headers: {
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Accept: "application/vnd.github+json",
+      "User-Agent": "profile-card-generator",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+  if (res.status === 409) return null;
+  if (!res.ok) throw new Error(`REST failed (${res.status}) ${path}: ${await res.text()}`);
+  const remaining = Number(res.headers.get("x-ratelimit-remaining"));
+  if (!Number.isNaN(remaining) && remaining < 50) {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  }
+  return res.json();
+}
+
+async function fetchOwnedRepositories() {
+  const repos = [];
+  let after = null;
   const query = `
     query($login: String!, $after: String) {
       user(login: $login) {
         repositories(ownerAffiliations: OWNER, isFork: false, first: 100, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) {
           pageInfo { hasNextPage endCursor }
           nodes {
+            name
+            owner { login }
             isPrivate
             stargazerCount
             forkCount
@@ -336,12 +436,6 @@ async function fetchLanguageAndRepoStats() {
                 }
               }
             }
-            languages(first: 20, orderBy: {field: SIZE, direction: DESC}) {
-              edges {
-                size
-                node { name color }
-              }
-            }
           }
         }
       }
@@ -350,27 +444,53 @@ async function fetchLanguageAndRepoStats() {
 
   while (true) {
     const data = await graphql(query, { login: USERNAME, after });
-    const repos = data.user.repositories;
-    for (const repo of repos.nodes || []) {
-      totalStars += repo.stargazerCount || 0;
-      totalForks += repo.forkCount || 0;
-      totalDiskUsageKB += repo.diskUsage || 0;
-      totalReleases += repo.releases?.totalCount || 0;
-      totalRepoCommits += repo.defaultBranchRef?.target?.history?.totalCount || 0;
-      for (const edge of repo.languages.edges || []) {
-        const name = edge.node.name;
-        // TypeScript は JavaScript に合算しない。アセット系（ShaderLab）は除外。
-        if (!name || EXCLUDED_LANGUAGES.has(name)) continue;
-        const prev = languageMap.get(name) || { size: 0, color: edge.node.color || "#8b949e" };
-        prev.size += edge.size || 0;
-        if (!prev.color && edge.node.color) prev.color = edge.node.color;
-        languageMap.set(name, prev);
-      }
-    }
-    if (!repos.pageInfo.hasNextPage) break;
-    after = repos.pageInfo.endCursor;
+    const page = data.user.repositories;
+    repos.push(...(page.nodes || []));
+    if (!page.pageInfo.hasNextPage) break;
+    after = page.pageInfo.endCursor;
   }
 
+  return repos;
+}
+
+async function fetchAuthorLanguagesForRepo(repo, languageMap, counters) {
+  if (counters.totalCommits >= MAX_TOTAL_COMMITS) return 0;
+
+  const owner = repo.owner.login;
+  const name = repo.name;
+  let repoCommits = 0;
+  let page = 1;
+
+  while (repoCommits < MAX_COMMITS_PER_REPO && counters.totalCommits < MAX_TOTAL_COMMITS) {
+    const commits = await restGet(`/repos/${owner}/${name}/commits`, {
+      author: USERNAME,
+      per_page: 100,
+      page,
+    });
+    if (!commits?.length) break;
+
+    for (const commit of commits) {
+      const detail = await restGet(`/repos/${owner}/${name}/commits/${commit.sha}`);
+      if (!detail?.files) continue;
+
+      for (const file of detail.files) {
+        const language = languageFromPath(file.filename);
+        addLanguageLines(languageMap, language, file.additions || 0);
+      }
+
+      repoCommits += 1;
+      counters.totalCommits += 1;
+      if (repoCommits >= MAX_COMMITS_PER_REPO || counters.totalCommits >= MAX_TOTAL_COMMITS) break;
+    }
+
+    if (commits.length < 100) break;
+    page += 1;
+  }
+
+  return repoCommits;
+}
+
+function summarizeLanguages(languageMap) {
   mergeJavaIntoJavaScript(languageMap);
 
   const totalLangSize = [...languageMap.values()].reduce((acc, x) => acc + x.size, 0);
@@ -382,12 +502,55 @@ async function fetchLanguageAndRepoStats() {
 
   return {
     topLanguages,
+    languageCount: languageMap.size,
+  };
+}
+
+/** Java は書かず JavaScript のみ。Linguist が Java と分類したバイトは JavaScript に合算する */
+function mergeJavaIntoJavaScript(languageMap) {
+  const java = languageMap.get("Java");
+  if (!java || !java.size) return;
+  const js = languageMap.get("JavaScript") || { size: 0, color: "#f1e05a" };
+  js.size = (js.size || 0) + java.size;
+  if (!js.color) js.color = "#f1e05a";
+  languageMap.set("JavaScript", js);
+  languageMap.delete("Java");
+}
+
+async function fetchLanguageAndRepoStats() {
+  const repos = await fetchOwnedRepositories();
+  const languageMap = new Map();
+  const counters = { totalCommits: 0 };
+
+  let totalStars = 0;
+  let totalForks = 0;
+  let totalDiskUsageKB = 0;
+  let totalReleases = 0;
+  let totalRepoCommits = 0;
+
+  for (const repo of repos) {
+    totalStars += repo.stargazerCount || 0;
+    totalForks += repo.forkCount || 0;
+    totalDiskUsageKB += repo.diskUsage || 0;
+    totalReleases += repo.releases?.totalCount || 0;
+    totalRepoCommits += repo.defaultBranchRef?.target?.history?.totalCount || 0;
+  }
+
+  await mapPool(repos, REPO_LANGUAGE_CONCURRENCY, (repo) =>
+    fetchAuthorLanguagesForRepo(repo, languageMap, counters)
+  );
+
+  const languageStats = summarizeLanguages(languageMap);
+
+  return {
+    topLanguages: languageStats.topLanguages,
     totalStars,
     totalForks,
     totalDiskUsageKB,
     totalReleases,
     totalRepoCommits,
-    languageCount: languageMap.size,
+    languageCount: languageStats.languageCount,
+    analyzedCommits: counters.totalCommits,
   };
 }
 
@@ -501,7 +664,7 @@ function buildSvg(model) {
 
   <!-- Bottom row: languages + metadata -->
   <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
-  <text x="366" y="374" class="muted" font-size="12">ShaderLab excluded（アセット系は除外）</text>
+  <text x="366" y="374" class="muted" font-size="12">My commits only（自分の push のみ）</text>
   <rect x="50" y="${barY}" width="${barWidth}" height="11" fill="none" class="line" rx="6"/>
   ${segments}
   ${languageRows}
