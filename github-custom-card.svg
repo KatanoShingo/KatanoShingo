@@ -36,7 +36,7 @@
 
   <text x="50" y="145" class="primary" font-size="23" font-weight="700">Activity</text>
   <text x="50" y="161" class="muted" font-size="12">（アクティビティ）</text>
-  <text x="50" y="185" class="fg" font-size="14">• Commits（コミット）: 7,919</text>
+  <text x="50" y="185" class="fg" font-size="14">• Commits（コミット）: 7,975</text>
   <text x="50" y="208" class="fg" font-size="14">• PR Opened（PR作成）: 49</text>
   <text x="50" y="231" class="fg" font-size="14">• Issues（課題）: 21</text>
   <text x="50" y="254" class="fg" font-size="14">• Comments（コメント）: 14</text>
@@ -64,27 +64,27 @@
   <text x="50" y="374" class="primary" font-size="24" font-weight="700">Top Languages（使用言語）</text>
   <text x="366" y="374" class="muted" font-size="12">My commits only（自分の push のみ）</text>
   <rect x="50" y="392" width="820" height="11" fill="none" class="line" rx="6"/>
-  <rect x="50.00" y="392" width="296.30" height="11" fill="#083fa1" rx="2"/><rect x="346.30" y="392" width="266.36" height="11" fill="#178600" rx="2"/><rect x="612.66" y="392" width="163.51" height="11" fill="#3178c6" rx="2"/><rect x="776.17" y="392" width="39.04" height="11" fill="#292929" rx="2"/><rect x="815.21" y="392" width="29.95" height="11" fill="#f1e05a" rx="2"/><rect x="845.16" y="392" width="6.43" height="11" fill="#3572A5" rx="2"/><rect x="851.59" y="392" width="5.17" height="11" fill="#012456" rx="2"/><rect x="856.76" y="392" width="3.92" height="11" fill="#89e051" rx="2"/>
+  <rect x="50.00" y="392" width="296.55" height="11" fill="#083fa1" rx="2"/><rect x="346.55" y="392" width="260.62" height="11" fill="#178600" rx="2"/><rect x="607.17" y="392" width="168.18" height="11" fill="#3178c6" rx="2"/><rect x="775.35" y="392" width="39.56" height="11" fill="#292929" rx="2"/><rect x="814.91" y="392" width="30.14" height="11" fill="#f1e05a" rx="2"/><rect x="845.05" y="392" width="6.45" height="11" fill="#3572A5" rx="2"/><rect x="851.50" y="392" width="5.19" height="11" fill="#012456" rx="2"/><rect x="856.69" y="392" width="3.93" height="11" fill="#89e051" rx="2"/>
   <circle cx="50" cy="421" r="4.5" fill="#083fa1"/>
 <text x="64" y="426" class="fg" font-size="15">Markdown</text>
-<text x="270" y="426" class="muted" font-size="14">36.13%</text><circle cx="470" cy="421" r="4.5" fill="#178600"/>
+<text x="270" y="426" class="muted" font-size="14">36.16%</text><circle cx="470" cy="421" r="4.5" fill="#178600"/>
 <text x="484" y="426" class="fg" font-size="15">C#</text>
-<text x="690" y="426" class="muted" font-size="14">32.48%</text><circle cx="50" cy="445" r="4.5" fill="#3178c6"/>
+<text x="690" y="426" class="muted" font-size="14">31.78%</text><circle cx="50" cy="445" r="4.5" fill="#3178c6"/>
 <text x="64" y="450" class="fg" font-size="15">TypeScript</text>
-<text x="270" y="450" class="muted" font-size="14">19.94%</text><circle cx="470" cy="445" r="4.5" fill="#292929"/>
+<text x="270" y="450" class="muted" font-size="14">20.51%</text><circle cx="470" cy="445" r="4.5" fill="#292929"/>
 <text x="484" y="450" class="fg" font-size="15">JSON</text>
-<text x="690" y="450" class="muted" font-size="14">4.76%</text><circle cx="50" cy="469" r="4.5" fill="#f1e05a"/>
+<text x="690" y="450" class="muted" font-size="14">4.82%</text><circle cx="50" cy="469" r="4.5" fill="#f1e05a"/>
 <text x="64" y="474" class="fg" font-size="15">JavaScript</text>
-<text x="270" y="474" class="muted" font-size="14">3.65%</text><circle cx="470" cy="469" r="4.5" fill="#3572A5"/>
+<text x="270" y="474" class="muted" font-size="14">3.68%</text><circle cx="470" cy="469" r="4.5" fill="#3572A5"/>
 <text x="484" y="474" class="fg" font-size="15">Python</text>
-<text x="690" y="474" class="muted" font-size="14">0.78%</text><circle cx="50" cy="493" r="4.5" fill="#012456"/>
+<text x="690" y="474" class="muted" font-size="14">0.79%</text><circle cx="50" cy="493" r="4.5" fill="#012456"/>
 <text x="64" y="498" class="fg" font-size="15">PowerShell</text>
 <text x="270" y="498" class="muted" font-size="14">0.63%</text><circle cx="470" cy="493" r="4.5" fill="#89e051"/>
 <text x="484" y="498" class="fg" font-size="15">Shell</text>
 <text x="690" y="498" class="muted" font-size="14">0.48%</text>
 
-  <text x="50" y="538" class="muted" font-size="12">Now Focus（直近90日）: Private Repository (89) | Private Repository (61) | Private Repository (49)</text>
-  <text x="50" y="558" class="muted" font-size="12">Consistency（継続性）: current（現在連続）33d / best（最長連続）33d / active days（活動日数）125 / total（直近1年の貢献数）8,381</text>
-  <text x="50" y="576" class="muted" font-size="12">Disk Usage（使用量）: 19.5 GB / Languages（言語数）: 14 / Updated（更新）: 2026-07-31</text>
+  <text x="50" y="538" class="muted" font-size="12">Now Focus（直近90日）: Private Repository (98) | Private Repository (61) | Private Repository (49)</text>
+  <text x="50" y="558" class="muted" font-size="12">Consistency（継続性）: current（現在連続）33d / best（最長連続）33d / active days（活動日数）125 / total（直近1年の貢献数）8,445</text>
+  <text x="50" y="576" class="muted" font-size="12">Disk Usage（使用量）: 19.5 GB / Languages（言語数）: 14 / Updated（更新）: 2026-08-01</text>
   <text x="870" y="576" class="muted" font-size="12" text-anchor="end">generated by GitHub Actions</text>
 </svg>
