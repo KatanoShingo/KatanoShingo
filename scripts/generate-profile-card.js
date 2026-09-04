@@ -296,7 +296,7 @@ async function fetchAllTimeContributionTotals(login, years) {
 }
 
 /** Unity アセット由来でランキングを歪める言語は集計から除外する */
-const EXCLUDED_LANGUAGES = new Set(["ShaderLab"]);
+const EXCLUDED_LANGUAGES = new Set(["ShaderLab", "Markdown"]);
 
 const MAX_COMMITS_PER_REPO = 150;
 const MAX_TOTAL_COMMITS = 800;
