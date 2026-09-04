@@ -119,6 +119,15 @@ function gradeRank(score) {
   return "D";
 }
 
+/** 継続活動・経験年数の加点 */
+function computeActivityBonus(consistency, githubYears) {
+  return (
+    clamp(consistency.current / 20, 0, 3.5) +
+    clamp(consistency.activeDays / 90, 0, 2) +
+    clamp(githubYears / 4, 0, 2)
+  );
+}
+
 async function fetchUserSummary() {
   const query = `
     query($login: String!) {
@@ -693,18 +702,21 @@ async function main() {
   const botCommitDeductions = await fetchBotCommitDeductions(user.contributionsCollection.contributionCalendar);
   const consistency = computeConsistency(user.contributionsCollection.contributionCalendar, botCommitDeductions);
   const totalCommitsForDisplay = Math.max(allTime.totalCommits || 0, repoStats.totalRepoCommits || 0);
+  const githubYears = yearsSince(user.createdAt);
 
-  const score =
+  const baseScore =
     clamp(Math.log10(totalCommitsForDisplay + 1) * 24, 0, 38) +
     clamp(Math.log10((user.pullRequests.totalCount || 0) + 1) * 18, 0, 23) +
     clamp(Math.log10((allTime.totalReviews || 0) + 1) * 16, 0, 21) +
     clamp(Math.log10((user.issues.totalCount || 0) + 1) * 10, 0, 12) +
     clamp(Math.log10((user.followers.totalCount || 0) + 1) * 8, 0, 10);
 
+  const score = baseScore + computeActivityBonus(consistency, githubYears);
+
   const model = {
     displayName: "Shingo",
     avatarDataUri,
-    githubYears: yearsSince(user.createdAt),
+    githubYears,
     githubDays: daysSince(user.createdAt),
     followers: user.followers.totalCount || 0,
     following: user.following.totalCount || 0,
