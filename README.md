@@ -3,7 +3,7 @@
 Welcome to my GitHub profile!  
 ソフトウェア開発者 / Unityエンジニアとして、ゲーム開発、グラフィックスプログラミング、そして効率化ツールの作成に情熱を注いでいます。また、ソフトウェアだけでなくハードウェア（3Dプリンタを活用したモデリング等）を絡めたモノづくりも得意としています。
 
-趣味は**週3回ジム**。増量期間中に、体重は **65kg → 73kg（+8kg）** まで伸ばしました。
+趣味は**週3回ジム**。増量期間中に、体重は **65kg → 78kg（+13kg）** まで伸ばしました。
 
 ![Strength training](https://img.shields.io/badge/Strength-3x%2Fweek-E65100?style=for-the-badge)
 
